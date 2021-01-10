@@ -1,0 +1,21 @@
+.movie-title {
+    background: gray;
+    border: solid 1px white;
+    padding : 20px
+}
+
+.movie-title-link:link {
+    text-decoration: none;
+    color: white;
+}
+
+:link {
+    text-decoration: none;
+    color: white;
+}
+
+a:hover {
+    text-decoration: none;
+    color: white;
+}
+
