@@ -17,7 +17,7 @@ export class CharacterDetails extends React.Component {
     // props.charURL => the char onwhich the user clicked 
     state = {
         character: {},
-        characterID : '',
+        characterID: '',
         films: null,
         status: 'initial'
     }
@@ -53,13 +53,13 @@ export class CharacterDetails extends React.Component {
 
 
     render() {
-    
+
         let charImgSrc = "/images/characters/" + this.props.match.params.charID + ".jpg"
         console.log(charImgSrc)
 
         return (
 
-            <Card style={{ width: '25rem' }} className="text-center mx-auto">
+            <Card fluid className="text-center mx-auto">
                 <Card.Header><h2>{this.state.character.name}</h2></Card.Header>
                 <Card.Img variant="top" className="movie-cover" src={charImgSrc} />
                 <Card.Body>
@@ -111,7 +111,10 @@ export class CharacterDetails extends React.Component {
                     </ListGroup>
                 </Card.Body>
                 <Card.Footer>
-                    <Link to={"/films/" + this.props.currentfilmID}><Button variant="dark" className="my-2">Back to film info</Button></Link>
+                    <div className="footer-btns">
+                        <div><Button variant="outline-secondary">Add To Favorites</Button></div>
+                        <div><Link to={"/films/" + this.props.match.params.filmID}><Button variant="dark" className="my-2">Back to film info</Button></Link></div>
+                    </div>
                 </Card.Footer>
             </Card>
         )

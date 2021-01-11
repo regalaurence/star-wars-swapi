@@ -22,6 +22,7 @@ export class MovieDetails extends React.Component {
         characters: [],
         currentFilmImg: '',
         status: 'initial',
+        isFavorite : false
     }
 
     componentDidMount() {
@@ -90,6 +91,23 @@ export class MovieDetails extends React.Component {
         )
     }
 
+    addToFavorites = () => {
+        if (this.state.isFavorite === false) {
+          return (
+                this.setState ({
+                    isFavorite: true
+                })
+
+            )
+        }
+        else if (this.state.isFavorite === true) {
+            return (
+                this.setState ({
+                    isFavorite: false
+                })
+            )
+        }
+    }
 
 
     render() {
@@ -101,7 +119,7 @@ export class MovieDetails extends React.Component {
                     currentFilmID ?
                         <Card fluid className="text-center mx-auto">
                             <Card.Header>
-                            <h2>{this.state.currentFilm.title}</h2>
+                                <h2>{this.state.currentFilm.title}</h2>
                             </Card.Header>
                             <Card.Body>
                                 <Card.Img variant="top" className="movie-cover" src={this.state.currentFilmImg} />
@@ -127,7 +145,10 @@ export class MovieDetails extends React.Component {
                                 </ListGroup>
                             </Card.Body>
                             <Card.Footer>
-                                <Link to={"/"}><Button variant="dark" className="my-2">Back to films</Button></Link>
+                                <div className="footer-btns">
+                                    <div><Button onClick={this.addToFavorites} variant="outline-secondary">Add To Favorites</Button></div>
+                                    <div><Link to={"/"}><Button variant="dark" className="my-2">Back to films</Button></Link></div>
+                                </div>
                             </Card.Footer>
                         </Card>
                         : null

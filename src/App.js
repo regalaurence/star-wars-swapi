@@ -7,7 +7,7 @@ import { Route } from 'react-router-dom';
 export const App = () => (
   <>
     <Route exact path='/' component={MovieList} />
-    <Route path='/people/:charID' component={CharacterDetails} />
+    <Route path='/people/:charID/:filmID' component={CharacterDetails} />
     <Route path='/films/:filmID' component={MovieDetails} />
     <Route path='/films/:filmID/characters' component={CharactersList} />
   </>
