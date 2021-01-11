@@ -1,4 +1,17 @@
 .movie-details-container {
-    text-align : center
-    
+    text-align : center;
+}
+
+.table-lign{
+   display: flex;
+   flex-direction: row;
+   justify-content: space-evenly;
+}
+
+.movie-cover {
+    padding: 50px;
+}
+
+.details-container {
+    border : none
 }

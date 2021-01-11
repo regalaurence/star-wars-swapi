@@ -5,6 +5,11 @@ import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
+import ListGroupItem from 'react-bootstrap/ListGroupItem'
+import ListGroup from 'react-bootstrap/ListGroup'
+import Card from 'react-bootstrap/Card'
+
 import './MovieDetails.css'
 
 
@@ -15,7 +20,8 @@ export class MovieDetails extends React.Component {
         currentFilmID: null,
         currentFilm: {},
         characters: [],
-        status: 'initial'
+        currentFilmImg: '',
+        status: 'initial',
     }
 
     componentDidMount() {
@@ -41,6 +47,7 @@ export class MovieDetails extends React.Component {
                 this.setState({
                     currentFilmID: filmID,
                     currentFilm: response.data,
+                    currentFilmImg: "/images/movies/" + filmID + ".jpg",
                     status: 'fetching'
                 })
                 this.populateCharacters(response.data.characters)
@@ -76,29 +83,53 @@ export class MovieDetails extends React.Component {
             return 'Encountered an error, please try again'
         }
         return (
-                <Col>
-                    {this.state.characters
-                        .map(char => <CharactersList name={char.name} charURL={char.url} />)}
-
-                    <Row><Link to={"/"}>Back to films</Link></Row>
-                </Col>
+            <>
+                {this.state.characters
+                    .map(char => <CharactersList currentFilmID={this.state.currentFilmID} name={char.name} charURL={char.url} />)}
+            </>
         )
     }
 
 
 
     render() {
-        const currentFilmID = this.state.currentFilm;
-
+        const currentFilmID = this.state.currentFilmID;
+        console.log(this.state.currentFilmID)
         return (
-            <Container fluid className="movie-details-container">
+            <Container className="mx-auto">
                 {
                     currentFilmID ?
-                        <Col>
-                            <Row className="movie-details-container"><h1>{this.state.currentFilm.title}</h1></Row>
-                            <Row className="movie-details-container">Director : {this.state.currentFilm.director}</Row>
-                            <Row className="movie-details-container">Characters : {this.renderCharacters()}</Row>
-                        </Col>
+                        <Card fluid className="text-center mx-auto">
+                            <Card.Header>
+                            <h2>{this.state.currentFilm.title}</h2>
+                            </Card.Header>
+                            <Card.Body>
+                                <Card.Img variant="top" className="movie-cover" src={this.state.currentFilmImg} />
+                                <Card.Text className="px-2">{this.state.currentFilm.opening_crawl}</Card.Text>
+                                <ListGroup>
+                                    <ListGroupItem ><Row >
+                                        <Col>Director</Col>
+                                        <Col>{this.state.currentFilm.director}</Col></Row>
+                                    </ListGroupItem>
+                                    <ListGroupItem><Row className="table-lign">
+                                        <Col>Issue Number</Col>
+                                        <Col>{this.state.currentFilm.episode_id}</Col></Row>
+                                    </ListGroupItem>
+                                    <ListGroupItem><Row className="table-lign">
+                                        <Col>Issue Number</Col>
+                                        <Col>{this.state.currentFilm.episode_id}</Col></Row>
+                                    </ListGroupItem>
+                                    <ListGroupItem>
+                                        <Row className="table-lign">
+                                            <Col>Characters</Col>
+                                            <Col>{this.renderCharacters()}</Col></Row>
+                                    </ListGroupItem>
+                                </ListGroup>
+                            </Card.Body>
+                            <Card.Footer>
+                                <Link to={"/"}><Button variant="dark" className="my-2">Back to films</Button></Link>
+                            </Card.Footer>
+                        </Card>
                         : null
                 }
             </Container>
@@ -106,3 +137,4 @@ export class MovieDetails extends React.Component {
 
     }
 }
+

@@ -1,5 +1,15 @@
 import React from 'react'
 import axios from 'axios'
+import Card from 'react-bootstrap/Card'
+import ListGroupItem from 'react-bootstrap/ListGroupItem'
+import ListGroup from 'react-bootstrap/ListGroup'
+import Button from 'react-bootstrap/Button'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import { Link } from 'react-router-dom';
+import { CharFilmList } from './';
+import { render } from '../../util'
+import { getId } from '../../util';
 
 export class CharacterDetails extends React.Component {
 
@@ -7,6 +17,9 @@ export class CharacterDetails extends React.Component {
     // props.charURL => the char onwhich the user clicked 
     state = {
         character: {},
+        characterID : '',
+        films: null,
+        status: 'initial'
     }
 
     componentDidMount() {
@@ -15,38 +28,92 @@ export class CharacterDetails extends React.Component {
                 this.setState({
                     character: response.data,
                 })
-                console.log(response.data)
+                this.populateFilms(this.state.character.films)
             })
     }
 
-    // films: (6) ["http://swapi.dev/api/films/1/", "http://swapi.dev/api/films/2/", "http://swapi.dev/api/films/3/", "http://swapi.dev/api/films/4/", "http://swapi.dev/api/films/5/", "http://swapi.dev/api/films/6/"]
-    // gender: "n/a"
-    // hair_color: "n/a"
-    // height: "96"
-    // homeworld: "http://swapi.dev/api/planets/8/"
-    // mass: "32"
-    // species: Array(1)
-    // 0: "http://swapi.dev/api/species/2/"
-    // starships: Array(0)
-    // length: 0
-    // vehicles: []
-    // __proto__: Object
+    populateFilms = (arrayOfFilmsURL) => {
+        console.log(arrayOfFilmsURL)
+        let filmPromises = arrayOfFilmsURL.map(filmURL =>
+            axios.get(filmURL)
+        )
+
+        return Promise.all(filmPromises)
+            .then((response) => {
+                console.log('res', response)
+                const films = response.map(film => film.data)
+                this.setState({
+                    films: films,
+                    status: 'final'
+                })
+            }).catch((error) => {
+                this.setState({ status: 'error' })
+            })
+    }
 
 
     render() {
+    
+        let charImgSrc = "/images/characters/" + this.props.match.params.charID + ".jpg"
+        console.log(charImgSrc)
 
-        console.log(this.props.match.params.charID)
         return (
-            <table>
-                <thead><tr><th>{this.state.character.name}</th></tr></thead>
-                {/* {this.state.character.name} is a {this.state.character.gender} character
-                born in {this.state.character.birth_year}. {this.state.character.name} has {this.state.character.eye_color} eyes and a {this.state.character.skin_color} skin color.  */}
-                <tboby>
-                    <tr><td>Gender</td><td>{this.state.character.gender}</td></tr>
-                    <tr><td>Birth year</td><td>{this.state.character.birth_year}</td></tr>
-                    <tr><td>Eye color</td><td>{this.state.character.eye_color}</td></tr>
-                    <tr><td>Skin color</td><td>{this.state.character.skin_color}</td></tr>
-                </tboby>
-            </table>)
+
+            <Card style={{ width: '25rem' }} className="text-center mx-auto">
+                <Card.Header><h2>{this.state.character.name}</h2></Card.Header>
+                <Card.Img variant="top" className="movie-cover" src={charImgSrc} />
+                <Card.Body>
+                    <ListGroup>
+                        <ListGroupItem><Row className="table-lign">
+                            <Col>Gender</Col>
+                            <Col>{this.state.character.gender}</Col></Row>
+                        </ListGroupItem>
+                        <ListGroupItem>
+                            <Row className="table-lign">
+                                <Col>Birth year</Col>
+                                <Col>{this.state.character.birth_year}</Col></Row>
+                        </ListGroupItem>
+                        <ListGroupItem>
+                            <Row className="table-lign">
+                                <Col>Eye color</Col>
+                                <Col>{this.state.character.eye_color}</Col></Row>
+                        </ListGroupItem>
+                        <ListGroupItem>
+                            <Row className="table-lign">
+                                <Col>Skin color</Col>
+                                <Col>{this.state.character.skin_color}</Col></Row>
+                        </ListGroupItem>
+                        <ListGroupItem>
+                            <Row className="table-lign">
+                                <Col>Hair color</Col>
+                                <Col>{this.state.character.hair_color}</Col></Row>
+                        </ListGroupItem>
+                        <ListGroupItem>
+                            <Row className="table-lign">
+                                <Col>Height in cm</Col>
+                                <Col>{this.state.character.height}</Col></Row>
+                        </ListGroupItem>
+                        <ListGroupItem>
+                            <Row className="table-lign">
+                                <Col>Mass in kg</Col>
+                                <Col>{this.state.character.mass}</Col></Row>
+                        </ListGroupItem>
+                        <ListGroupItem>
+                            <Row className="table-lign">
+                                <Col>Films</Col>
+                                <Col>
+                                    {this.state.films ?
+                                        render(this.state.status, this.state.films
+                                            .map(film => <CharFilmList title={film.title} filmURL={film.url} />)) : null}
+                                </Col>
+                            </Row>
+                        </ListGroupItem>
+                    </ListGroup>
+                </Card.Body>
+                <Card.Footer>
+                    <Link to={"/films/" + this.props.currentfilmID}><Button variant="dark" className="my-2">Back to film info</Button></Link>
+                </Card.Footer>
+            </Card>
+        )
     }
 }

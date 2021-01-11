@@ -3,8 +3,6 @@ import './MoviesList.css'
 import axios from 'axios'
 import { MovieTitle } from '.'
 import Container from 'react-bootstrap/Container'
-import { Link } from 'react-router-dom';
-import Button from 'react-bootstrap/Button'
 
 
 export class MovieList extends React.Component {

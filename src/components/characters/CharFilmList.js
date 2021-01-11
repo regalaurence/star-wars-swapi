@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
+import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { getId } from '../../util';
@@ -8,18 +9,19 @@ import { getId } from '../../util';
 // props.name : for each char, the char name
 // props.charurl : for each char, the char URL
 
-export class CharactersList extends React.Component {
+export class CharFilmList extends React.Component {
 
+    
     render() {
 
-        let id = getId(this.props.charURL)
-        let charLink = "/people/" + id
-
-        return (
+        const id = getId(this.props.filmURL)
+        const movieLink = "/films/" + id;
+ 
+            return (
                 <Row>
                      <Col>
-                     <Link to={charLink}>
-                       {this.props.name}
+                     <Link to={movieLink}>
+                       {this.props.title}
                     </Link>
                     </Col>
                 </Row>
