@@ -20,18 +20,18 @@ export class MovieList extends React.Component {
       })
   }
 
-
   render() {
+    
     return (
-      <Container fluid className="movies-list-container">
-        <h1>Star Wars Movies Wiki</h1>
-        {this.state.films.map((film, index) =>
+      <Container fluid className="text-center">
+        <h1 className="m-4">Pick Star Wars Movies</h1>
+        <div className="mx-auto carddeck">{this.state.films.map((film) =>
           <MovieTitle
             filmURL={film.url}
             title={film.title}
-            key={index}
           /> 
         )}
+        </div>
       </Container>
     )
   }

@@ -1,8 +1,7 @@
 import React from 'react'
 import axios from 'axios'
-import Card from 'react-bootstrap/Card'
-import ListGroupItem from 'react-bootstrap/ListGroupItem'
-import ListGroup from 'react-bootstrap/ListGroup'
+import Image from 'react-bootstrap/Image'
+import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -16,7 +15,7 @@ export class CharacterDetails extends React.Component {
 
     // props.charURL => the char onwhich the user clicked 
     state = {
-        character: {},
+        character: null,
         characterID: '',
         films: null,
         status: 'initial'
@@ -58,65 +57,72 @@ export class CharacterDetails extends React.Component {
         console.log(charImgSrc)
 
         return (
+            <>
+                {this.state.character ?
+                    <>
+                        <Row className="p-2 m-2 text-center mx-auto">
+                            <Col><h1>{this.state.character.name}</h1></Col>
+                        </Row>
 
-            <Card fluid className="text-center mx-auto">
-                <Card.Header><h2>{this.state.character.name}</h2></Card.Header>
-                <Card.Img variant="top" className="movie-cover" src={charImgSrc} />
-                <Card.Body>
-                    <ListGroup>
-                        <ListGroupItem><Row className="table-lign">
-                            <Col>Gender</Col>
-                            <Col>{this.state.character.gender}</Col></Row>
-                        </ListGroupItem>
-                        <ListGroupItem>
-                            <Row className="table-lign">
-                                <Col>Birth year</Col>
-                                <Col>{this.state.character.birth_year}</Col></Row>
-                        </ListGroupItem>
-                        <ListGroupItem>
-                            <Row className="table-lign">
-                                <Col>Eye color</Col>
-                                <Col>{this.state.character.eye_color}</Col></Row>
-                        </ListGroupItem>
-                        <ListGroupItem>
-                            <Row className="table-lign">
-                                <Col>Skin color</Col>
-                                <Col>{this.state.character.skin_color}</Col></Row>
-                        </ListGroupItem>
-                        <ListGroupItem>
-                            <Row className="table-lign">
-                                <Col>Hair color</Col>
-                                <Col>{this.state.character.hair_color}</Col></Row>
-                        </ListGroupItem>
-                        <ListGroupItem>
-                            <Row className="table-lign">
-                                <Col>Height in cm</Col>
-                                <Col>{this.state.character.height}</Col></Row>
-                        </ListGroupItem>
-                        <ListGroupItem>
-                            <Row className="table-lign">
-                                <Col>Mass in kg</Col>
-                                <Col>{this.state.character.mass}</Col></Row>
-                        </ListGroupItem>
-                        <ListGroupItem>
-                            <Row className="table-lign">
-                                <Col>Films</Col>
-                                <Col>
-                                    {this.state.films ?
+                        <Container className="movie-details-container text-center mx-auto">
+
+                            <div className="left-part-lg">
+                                <Row>
+                                    <Col><Image rounded className="img-thumbail" src={charImgSrc} /></Col>
+                                </Row>
+                            </div>
+                            <div className="right-part-lg">
+                                <Row className="p-3">
+                                    <Col><h2>About {this.state.character.name}</h2></Col>
+                                </Row>
+
+                                <Row className="text-left">
+                                    <Col><p><strong>Gender</strong></p></Col>
+                                    <Col>{this.state.character.gender}</Col>
+                                </Row>
+                                <Row className="text-left">
+                                    <Col><p><strong>Birth Year</strong></p></Col>
+                                    <Col>{this.state.character.birth_year}</Col>
+                                </Row>
+                                <Row className="text-left">
+                                    <Col><p><strong>Eye color</strong></p></Col>
+                                    <Col>{this.state.character.eye_color}</Col>
+                                </Row>
+                                <Row className="text-left">
+                                    <Col><p><strong>Skin Color</strong></p></Col>
+                                    <Col>{this.state.character.skin_color}</Col>
+                                </Row>
+                                <Row className="text-left">
+                                    <Col><p><strong>Hair Color</strong></p></Col>
+                                    <Col>{this.state.character.hair_color}</Col>
+                                </Row>
+                                <Row className="text-left">
+                                    <Col><p><strong>Height and weight</strong></p></Col>
+                                    <Col>{this.state.character.height}cm, {this.state.character.mass}kg</Col>
+                                </Row>
+                                <hr></hr>
+                                <Row className="text-left">
+                                    <Col><p><strong>Movies</strong></p></Col>
+                                    <Col>{this.state.films ?
                                         render(this.state.status, this.state.films
-                                            .map(film => <CharFilmList title={film.title} filmURL={film.url} />)) : null}
-                                </Col>
-                            </Row>
-                        </ListGroupItem>
-                    </ListGroup>
-                </Card.Body>
-                <Card.Footer>
-                    <div className="footer-btns">
-                        <div><Button variant="outline-secondary">Add To Favorites</Button></div>
-                        <div><Link to={"/films/" + this.props.match.params.filmID}><Button variant="dark" className="my-2">Back to film info</Button></Link></div>
-                    </div>
-                </Card.Footer>
-            </Card>
+                                            .map(film => <CharFilmList title={film.title} filmURL={film.url} />)) : null}</Col>
+                                </Row>
+                            </div>
+                        </Container>
+                        <Container className="text-center">
+                            <footer>
+                                <Link to={"/"}><Button variant="dark" className="my-2">Back to films</Button></Link>
+                                <Button onClick={() => this.props.addCharToFavorites(this.state.character)} variant="dark" className="m-2">Add to favorite</Button>
+                            </footer>
+                        </Container>
+                    </>
+                    : null
+                }
+            </>
+
+
         )
     }
 }
+
+

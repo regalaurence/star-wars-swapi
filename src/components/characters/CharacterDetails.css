@@ -3,3 +3,7 @@
     flex-direction: column;
     flex-wrap: wrap;
 }
+
+.img-thumbail {
+    height: 50vh
+}

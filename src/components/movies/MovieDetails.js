@@ -6,9 +6,7 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
-import ListGroupItem from 'react-bootstrap/ListGroupItem'
-import ListGroup from 'react-bootstrap/ListGroup'
-import Card from 'react-bootstrap/Card'
+import Image from 'react-bootstrap/Image'
 
 import './MovieDetails.css'
 
@@ -22,20 +20,19 @@ export class MovieDetails extends React.Component {
         characters: [],
         currentFilmImg: '',
         status: 'initial',
-        isFavorite : false
+        isFavorite: false
     }
 
     componentDidMount() {
         this.getFilmDetails();
     }
 
+    // componentDidUpdate(oldProps) {
+    //     if (oldProps.match.params.filmID !== this.props.match.params.filmID) {
+    //         this.getFilmDetails();
+    //     }
 
-    componentDidUpdate(oldProps) {
-        if (oldProps.match.params.filmID !== this.props.match.params.filmID) {
-            this.getFilmDetails();
-        }
-
-    }
+    // }
 
     getFilmDetails() {
         if (this.state.filmID) {
@@ -91,69 +88,83 @@ export class MovieDetails extends React.Component {
         )
     }
 
-    addToFavorites = () => {
-        if (this.state.isFavorite === false) {
-          return (
-                this.setState ({
-                    isFavorite: true
-                })
-
-            )
-        }
-        else if (this.state.isFavorite === true) {
-            return (
-                this.setState ({
-                    isFavorite: false
-                })
-            )
-        }
-    }
+    // addToFavorite = () => {
+    //     if (this.state.isFavorite === false) {
+    //         return (
+    //             this.setState({
+    //                 isFavorite: true
+    //             })
+    //         )
+    //     }
+    //     else if (this.state.isFavorite === true) {
+    //         return (
+    //             this.setState({
+    //                 isFavorite: false
+    //             })
+    //         )
+    //     }
+    // }
 
 
     render() {
         const currentFilmID = this.state.currentFilmID;
         console.log(this.state.currentFilmID)
         return (
-            <Container className="mx-auto">
+            <>
+                <Row className="p-2 m-2 text-center mx-auto">
+                    <Col><h1>{this.state.currentFilm.title}</h1></Col>
+                </Row>
                 {
                     currentFilmID ?
-                        <Card fluid className="text-center mx-auto">
-                            <Card.Header>
-                                <h2>{this.state.currentFilm.title}</h2>
-                            </Card.Header>
-                            <Card.Body>
-                                <Card.Img variant="top" className="movie-cover" src={this.state.currentFilmImg} />
-                                <Card.Text className="px-2">{this.state.currentFilm.opening_crawl}</Card.Text>
-                                <ListGroup>
-                                    <ListGroupItem ><Row >
-                                        <Col>Director</Col>
-                                        <Col>{this.state.currentFilm.director}</Col></Row>
-                                    </ListGroupItem>
-                                    <ListGroupItem><Row className="table-lign">
-                                        <Col>Issue Number</Col>
-                                        <Col>{this.state.currentFilm.episode_id}</Col></Row>
-                                    </ListGroupItem>
-                                    <ListGroupItem><Row className="table-lign">
-                                        <Col>Issue Number</Col>
-                                        <Col>{this.state.currentFilm.episode_id}</Col></Row>
-                                    </ListGroupItem>
-                                    <ListGroupItem>
-                                        <Row className="table-lign">
-                                            <Col>Characters</Col>
-                                            <Col>{this.renderCharacters()}</Col></Row>
-                                    </ListGroupItem>
-                                </ListGroup>
-                            </Card.Body>
-                            <Card.Footer>
-                                <div className="footer-btns">
-                                    <div><Button onClick={this.addToFavorites} variant="outline-secondary">Add To Favorites</Button></div>
-                                    <div><Link to={"/"}><Button variant="dark" className="my-2">Back to films</Button></Link></div>
+                        <>
+
+                            <Container className="movie-details-container text-center mx-auto">
+
+                                <div className="left-part-lg">
+                                    <Row>
+                                        <Col><Image rounded className="movie-cover img-thumbail" src={this.state.currentFilmImg} /></Col>
+                                    </Row>
                                 </div>
-                            </Card.Footer>
-                        </Card>
+                                <div className="right-part-lg">
+                                    <Row className="p-3">
+                                        <Col><h2>About the movie</h2></Col>
+                                    </Row>
+
+                                    <Row className="text-left">
+                                        <Col><p><strong>Director</strong></p></Col>
+                                        <Col>{this.state.currentFilm.director}</Col>
+                                    </Row>
+                                    <Row className="text-left">
+                                        <Col><p><strong>Issue Number</strong></p></Col>
+                                        <Col>{this.state.currentFilm.episode_id}</Col>
+                                    </Row>
+                                    <hr></hr>
+                                    <Row className="text-left">
+                                        <Col><p><strong>Characters</strong></p></Col>
+                                        <Col>{this.renderCharacters()}</Col>
+                                    </Row>
+                                </div>
+                            </Container>
+                            <Container><hr></hr>
+                                <Row className="p-3 text-center">
+                                    <Col><h2>What's the story?</h2>
+                                    </Col>
+                                </Row>
+                                <Row className="p-4 text-justify"><em><p>{this.state.currentFilm.opening_crawl}</p></em></Row>
+                                <hr></hr>
+                            </Container>
+                            <Container className="text-center">
+                                <footer>
+                                    <Link to={"/films"}><Button variant="dark" className="m-2">Back to films</Button></Link>
+                                    <Button onClick={() => this.props.addMovieToFavorites(this.state.currentFilm)} variant="dark" className="m-2">Add to favorite</Button>
+                                </footer>
+                            </Container>
+
+                        </>
                         : null
+                    
                 }
-            </Container>
+            </>
         )
 
     }

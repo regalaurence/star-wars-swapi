@@ -1,17 +1,48 @@
 .movie-details-container {
     text-align : center;
+    justify-content: space-between;
+    display: flex;
+    flex-direction : column
 }
 
-.table-lign{
-   display: flex;
-   flex-direction: row;
-   justify-content: space-evenly;
+.container-body {
+    text-align : center;
+    border : solid 1px grey;
 }
 
 .movie-cover {
-    padding: 50px;
+    height : 50vh;
 }
 
 .details-container {
     border : none
 }
+
+
+
+@media only screen and (min-width: 1000px) {
+    .movie-details-container {
+      flex-direction: row;
+      justify-content: space-evenly;
+    }
+  }
+
+  @media only screen and (min-width: 1000px) {
+    .left-part-lg {
+     margin: 50px;
+    }
+  }
+  
+  @media only screen and (min-width: 1000px) {
+    .right-part-lg {
+     margin: 50px
+    }
+  }
+
+  @media only screen and (min-width: 1000px) {
+    .movie-cover {
+     height: 120vh
+        }
+  }
+
+

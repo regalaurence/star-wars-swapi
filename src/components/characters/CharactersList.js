@@ -13,7 +13,7 @@ export class CharactersList extends React.Component {
     render() {
 
         let id = getId(this.props.charURL)
-        let charLink = "/people/" + id + "/" + this.props.currentFilmID
+        let charLink = "/people/" + id 
 
         return (
                 <Row>

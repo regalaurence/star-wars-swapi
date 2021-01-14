@@ -1,9 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import { getId } from '../../util';
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
 
 // props inherited from parents : 
 // props.title
@@ -12,19 +11,40 @@ import Button from 'react-bootstrap/Button'
 // props.title
 
 
+export class MovieTitle extends React.Component {
 
-export const MovieTitle = (props) => {
-    const id = getId(props.filmURL)
+    state = {
+        favoriteMovies : []
+    }
+
+    updateFavoriteList = (movie) => {
+        let favoriteMoviesCopy = [...this.state.favoriteMovies]
+        let newFavoriteMovies = favoriteMoviesCopy.push(movie)
+        this.setState ({
+            favoriteMovies : newFavoriteMovies
+        })
+    }
+
+    render () {
+
+    const id = getId(this.props.filmURL)
     const movieLink = "/films/" + id;
+
     return (
-        <Row>
-            <Col>
-            <Link className="movie-title-link" to={movieLink}>
-                <Button variant="dark" size="lg" className="my-1">
-                    {props.title}
+        <Card className="m-2">
+            <Card.Img className="card-img-top" src={"/images/movies/cards/" + id + ".jpg"} />
+            <Card.Body>
+                <Card.Text><strong>{this.props.title}</strong></Card.Text>
+            </Card.Body>
+            <Card.Footer>
+                <Link className="movie-title-link" to={movieLink}>
+                    <Button variant="dark">
+                        Details
                 </Button>
                 </Link>
-            </Col>
-        </Row>
+            </Card.Footer>
+        </Card>
+
     )
+}
 }
