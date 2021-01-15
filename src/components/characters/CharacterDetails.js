@@ -8,17 +8,20 @@ import Col from 'react-bootstrap/Col'
 import { Link } from 'react-router-dom';
 import { CharFilmList } from './';
 import { render } from '../../util'
-import { getId } from '../../util';
+import { ToggleFav } from '../navigation'
 
 export class CharacterDetails extends React.Component {
 
 
     // props.charURL => the char onwhich the user clicked 
     state = {
-        character: null,
-        characterID: '',
-        films: null,
-        status: 'initial'
+        character: {},
+        isFavorite: false,
+        films: [],
+        isCharLoading: true,
+        areFilmsLoading: true,
+        isCharError: false,
+        areFilmsError: false
     }
 
     componentDidMount() {
@@ -26,13 +29,18 @@ export class CharacterDetails extends React.Component {
             .then(response => {
                 this.setState({
                     character: response.data,
+                    isCharLoading: false
                 })
                 this.populateFilms(this.state.character.films)
+            })
+            .catch((error) => {
+                this.setState({
+                    isCharError: true
+                })
             })
     }
 
     populateFilms = (arrayOfFilmsURL) => {
-        console.log(arrayOfFilmsURL)
         let filmPromises = arrayOfFilmsURL.map(filmURL =>
             axios.get(filmURL)
         )
@@ -43,29 +51,37 @@ export class CharacterDetails extends React.Component {
                 const films = response.map(film => film.data)
                 this.setState({
                     films: films,
-                    status: 'final'
+                    areFilmsLoading: false
                 })
-            }).catch((error) => {
-                this.setState({ status: 'error' })
             })
+            .catch((error) => {
+                this.setState({
+                    areFilmsError: true
+                })
+            })
+    }
+
+    addToFavoriteHandler = () => {
+        this.props.addCharToFavorites(this.state.character)
+        this.setState ({
+            isFavorite: true
+        })
     }
 
 
     render() {
 
         let charImgSrc = "/images/characters/" + this.props.match.params.charID + ".jpg"
-        console.log(charImgSrc)
-
+        // console.log(charImgSrc)
+    
         return (
             <>
-                {this.state.character ?
+                {this.state.character && render(this.state.isCharLoading, this.state.isCharError,
                     <>
                         <Row className="p-2 m-2 text-center mx-auto">
                             <Col><h1>{this.state.character.name}</h1></Col>
                         </Row>
-
                         <Container className="movie-details-container text-center mx-auto">
-
                             <div className="left-part-lg">
                                 <Row>
                                     <Col><Image rounded className="img-thumbail" src={charImgSrc} /></Col>
@@ -103,24 +119,24 @@ export class CharacterDetails extends React.Component {
                                 <hr></hr>
                                 <Row className="text-left">
                                     <Col><p><strong>Movies</strong></p></Col>
-                                    <Col>{this.state.films ?
-                                        render(this.state.status, this.state.films
-                                            .map(film => <CharFilmList title={film.title} filmURL={film.url} />)) : null}</Col>
+                                    <Col> {/* lets check the loading status and render accordingly */}
+                                        {render(this.state.areFilmsLoading, this.state.areFilmsError, 
+                                        this.state.films.map(film => <CharFilmList title={film.title} filmURL={film.url} />)
+                                        )}  
+                                    </Col>
                                 </Row>
                             </div>
                         </Container>
                         <Container className="text-center">
                             <footer>
                                 <Link to={"/"}><Button variant="dark" className="my-2">Back to films</Button></Link>
-                                <Button onClick={() => this.props.addCharToFavorites(this.state.character)} variant="dark" className="m-2">Add to favorite</Button>
+                                <ToggleFav isFavorite={this.state.isFavorite} addToFavoriteHandler={this.addToFavoriteHandler}></ToggleFav>
                             </footer>
                         </Container>
                     </>
-                    : null
+                )
                 }
             </>
-
-
         )
     }
 }

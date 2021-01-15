@@ -2,19 +2,22 @@ import React from 'react'
 import './App.css'
 import { MovieDetails, MovieList } from './components/movies'
 import { CharactersList, CharacterDetails } from './components/characters'
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { Navigation } from './components/navigation'
 
+// use the initial state to show info to users 
 export class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       favoriteMovies: [],
       favoriteCharacters: [],
-      allMovies: [],
+      // isLoading: true,
+      // error : false
     }
     this.addMovieToFavorites = this.addMovieToFavorites.bind(this)
     this.addCharToFavorites = this.addCharToFavorites.bind(this)
+    // this.removeMovieFromFavorites = this.removeMovieFromFavorites.bind(this)
 
   }
 
@@ -47,10 +50,17 @@ export class App extends React.Component {
 
   addMovieToFavorites(movie) {
     // console.log('state', this.state)
-    this.setState(
-      { favoriteMovies: [...this.state.favoriteMovies, movie] },
-    )
+    this.setState({ 
+      favoriteMovies: [...this.state.favoriteMovies, movie] 
+    })
   }
+
+  // removeMovieFromFavorites(arrayOfFav, name) {
+  //   let filteredDeletion = arrayOfFav.filter(fav => fav.title !== name)
+  //   this.setState({
+  //     favoriteMovies: filteredDeletion 
+  //   })
+  // }
 
   addCharToFavorites(char) {
     // console.log('state', this.state)
@@ -65,13 +75,15 @@ export class App extends React.Component {
         <Navigation favoriteMovies={this.state.favoriteMovies} favoriteCharacters={this.state.favoriteCharacters} />
         <Route exact path='/' component={MovieList} />
         <Route exact path='/films' component={MovieList} />
-        <Route path='/people/:charID' component={(props) => <CharacterDetails {...props} addCharToFavorites={this.addCharToFavorites} />} />
-        {/* we have to force the transfer of props because we're passing the component via a function */}
-        <Route path='/films/:filmID' component={(props) => <MovieDetails {...props} addMovieToFavorites={this.addMovieToFavorites} />} />
+        <Route path='/people/:charID' render={(props) => <CharacterDetails 
+                                                          {...props} 
+                                                          addCharToFavorites={this.addCharToFavorites} 
+                                                          // removeMovieFromFavorites={this.removeMovieFromFavorites} 
+                                                          currentFavorites={this.state.favoriteCharacters.map(char => char.name)}/>} />
+        <Route path='/films/:filmID' render={(props) => <MovieDetails {...props} addMovieToFavorites={this.addMovieToFavorites} currentFavorites={this.state.favoriteMovies.map(movie => movie.title)}/>} />
         <Route path='/films/:filmID/characters' component={CharactersList} />
       </>
     )
-
   }
 }
 

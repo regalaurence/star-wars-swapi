@@ -1,30 +1,27 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { getId } from '../../util';
+
+// This component renders the movies in which the characters appears 
 
 // received params :
 // props.name : for each char, the char name
 // props.charurl : for each char, the char URL
 
-export class CharFilmList extends React.Component {
+export const CharFilmList = (props) => {
 
-    
-    render() {
-
-        const id = getId(this.props.filmURL)
+        const id = getId(props.filmURL)
         const movieLink = "/films/" + id;
  
             return (
                 <Row>
                      <Col>
                      <Link to={movieLink}>
-                       {this.props.title}
+                       {props.title}
                     </Link>
                     </Col>
                 </Row>
         )
     }
-}

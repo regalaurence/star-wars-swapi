@@ -8,21 +8,18 @@ import { getId } from '../../util';
 // props.name : for each char, the char name
 // props.charurl : for each char, the char URL
 
-export class CharactersList extends React.Component {
+export const CharactersList = (props) => {
 
-    render() {
-
-        let id = getId(this.props.charURL)
+        let id = getId(props.charURL)
         let charLink = "/people/" + id 
 
         return (
                 <Row>
                      <Col>
                      <Link to={charLink}>
-                       {this.props.name}
+                       {props.name}
                     </Link>
                     </Col>
                 </Row>
         )
     }
-}
