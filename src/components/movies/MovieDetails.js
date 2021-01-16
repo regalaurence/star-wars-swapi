@@ -84,7 +84,7 @@ export class MovieDetails extends React.Component {
     }
 
     toggleFavoriteHandler = () => {
-        if (!this.props.currentFavoriteMovies.includes(this.state.currentFilm.title)) {
+        if (!this.props.currentFavoriteMoviesTitles.includes(this.state.currentFilm.title)) {
             this.props.addToFavorites("favoriteMovies", "hasFavoriteMovies", this.props.currentFavoriteMovies, this.state.currentFilm)
             this.setState({
                 isFavorite : true
@@ -95,6 +95,7 @@ export class MovieDetails extends React.Component {
             this.setState({
                 isFavorite : false
             })
+            console.log(this.state.isFavorite)
         }
     }
 

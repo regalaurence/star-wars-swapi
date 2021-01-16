@@ -1,6 +1,6 @@
 
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import { LinkContainer } from "react-router-bootstrap";
+import { Link } from 'react-router-dom';
 import { getId, render } from '../../util';
 
 
@@ -10,7 +10,7 @@ export const AllMovies = (props) => {
         <NavDropdown title="Movies" id="basic-nav-dropdown">
             {render(props.isLoading, props.isError,
                 props.allMovies
-                    .map(movie => <LinkContainer to={"/films/" + getId(movie.url)}><NavDropdown.Item>{movie.title}</NavDropdown.Item></LinkContainer>))}
+                    .map(movie => <NavDropdown.Item as={Link} to={"/films/" + getId(movie.url)}>{movie.title}</NavDropdown.Item>))}
         </NavDropdown>
     )
 }
