@@ -120,7 +120,7 @@ export class CharacterDetails extends React.Component {
             })
         }
         else {
-            this.props.removeObjFromFavoriteChar("favoriteCharacters", this.props.currentFavoriteChars, this.state.character.item.name)
+            this.props.removeFromFavorites("favoriteCharacters", this.props.currentFavoriteChars, this.state.character.item.name, "name")
             this.setState({
                 character: {
                     ...this.state.character,

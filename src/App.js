@@ -13,8 +13,8 @@ export class App extends React.Component {
       favoriteCharacters: [],
     }
     this.addToFavorites = this.addToFavorites.bind(this)
-    this.removeObjFromFavoriteMovies = this.removeObjFromFavoriteMovies.bind(this)
-    this.removeObjFromFavoriteChar = this.removeObjFromFavoriteChar.bind(this)
+    this.removeFromFavorites = this.removeFromFavorites.bind(this)
+    this.removeFromFavorites = this.removeFromFavorites.bind(this)
     this.setLocalStorage = this.setLocalStorage.bind(this);
     // persist favorites 
     window.onbeforeunload = this.setLocalStorage
@@ -50,21 +50,14 @@ export class App extends React.Component {
   }
 
   //left it so to see there is only one parameter to change but how?  if remains so, got to clear off the params
-  removeObjFromFavoriteMovies(stateKeyFavoritesObj, arrayOfFavObj, favObjNameToRemove) {
-    let filteredDeletionObj = arrayOfFavObj.filter(fav => fav.title !== favObjNameToRemove)
+  removeFromFavorites(stateKeyFavoritesObj, arrayOfFavObj, favObjNameToRemove, keyToFilter) {
+    let filteredDeletionObj = arrayOfFavObj.filter(fav => fav[keyToFilter] !== favObjNameToRemove)
 
     this.setState({
       [stateKeyFavoritesObj]: filteredDeletionObj,
     })
   }
 
-  removeObjFromFavoriteChar(stateKeyFavoritesObj, arrayOfFavObj, favObjNameToRemove) {
-    let filteredDeletionObj = arrayOfFavObj.filter(fav => fav.name !== favObjNameToRemove)
-
-    this.setState({
-      [stateKeyFavoritesObj]: filteredDeletionObj,
-    })
-  }
 
   render() {
     return (
@@ -80,7 +73,7 @@ export class App extends React.Component {
           {...props}
           addToFavorites={this.addToFavorites}
           removeNameFromFavorites={this.removeNameFromFavorites}
-          removeObjFromFavoriteChar={this.removeObjFromFavoriteChar}
+          removeFromFavorites={this.removeFromFavorites}
           currentFavoriteCharsNames={this.state.favoriteCharacters.map(c => c.name)}
           currentFavoriteChars={this.state.favoriteCharacters}
         />} />
@@ -88,7 +81,7 @@ export class App extends React.Component {
           {...props}
           addToFavorites={this.addToFavorites}
           removeNameFromFavorites={this.removeNameFromFavorites}
-          removeObjFromFavoriteMovies={this.removeObjFromFavoriteMovies}
+          removeFromFavorites={this.removeFromFavorites}
           currentFavoriteMoviesTitles={this.state.favoriteMovies.map(f => f.title)}
           currentFavoriteMovies={this.state.favoriteMovies}
         />} />
