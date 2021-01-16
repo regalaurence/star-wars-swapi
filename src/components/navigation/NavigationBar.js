@@ -31,7 +31,7 @@ export class NavigationBar extends React.Component {
 
 
     render() {
-        console.log("FAVORITES : " + this.props.favoriteMovies)
+
         return (
             <Navbar bg="light" expand="lg">
                 <LinkContainer to="/films"><Navbar.Brand>A Star Wars Wiki</Navbar.Brand></LinkContainer>

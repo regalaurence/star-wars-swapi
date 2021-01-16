@@ -91,7 +91,7 @@ export class MovieDetails extends React.Component {
             })
         }
         else {
-            this.props.removeFromFavorites("favoriteMovies", this.props.currentFavoriteMovies, this.state.currentFilm.title)
+            this.props.removeFromFavorites("favoriteMovies", this.props.currentFavoriteMoviesTitles, this.state.currentFilm.title)
             this.setState({
                 isFavorite : false
             })

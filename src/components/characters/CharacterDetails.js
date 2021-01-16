@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { Link } from 'react-router-dom';
-import { CharFilmList, CharVehiclesList, CharStarshipsList, CharSpecies } from './';
+import { CharFilmList, CharVehiclesList, CharStarshipsList, CharSpecies, FooterButtons } from './';
 import { render } from '../../util'
 import { ToggleFav } from '../navigation'
 
@@ -90,14 +90,14 @@ export class CharacterDetails extends React.Component {
     }
 
     toggleFavoriteHandler = () => {
-        if (!this.props.currentFavoriteChars.includes(this.state.character.name)) {
+        if (!this.props.currentFavoriteCharsNames.includes(this.state.character.name)) {
             this.props.addToFavorites("favoriteCharacters", "hasFavoriteChars", this.props.currentFavoriteChars, this.state.character)
             this.setState({
                 isFavorite: true
             })
         }
         else {
-            this.props.removeFromFavorites("favoriteCharacters", this.props.currentFavoriteChars, this.state.character.name)
+            this.props.removeFromFavorites("favoriteCharacters", this.props.currentFavoriteCharsNames, this.state.character.name)
             this.setState({
                 isFavorite: false
             })
@@ -178,15 +178,12 @@ export class CharacterDetails extends React.Component {
                             </div>
                         </Container>
                         <Container className="text-center">
-                            <footer>
-                                <Link to={"/"}><Button variant="dark" className="my-2">Back to films</Button></Link>
-                                <ToggleFav
+                            <FooterButtons
                                     isFavorite={this.state.isFavorite}
                                     toggleFavoriteHandler={this.toggleFavoriteHandler}
                                     currentFavorites={this.props.currentFavoriteChars}
                                     toAdd={this.state.character.name}
-                                />
-                            </footer>
+                            />
                         </Container>
                     </>
                 )

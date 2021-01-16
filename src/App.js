@@ -49,14 +49,16 @@ export class App extends React.Component {
                                                           {...props} 
                                                           addToFavorites={this.addToFavorites} 
                                                           removeFromFavorites={this.removeFromFavorites} 
-                                                          currentFavoriteChars={this.state.favoriteCharacters.map(char => char.name)}
-                                                          
+                                                          currentFavoriteCharsNames={this.state.favoriteCharacters.map(char => char.name)}
+                                                          currentFavoriteChars={this.state.favoriteCharacters}
                                                           />} />
         <Route path='/films/:filmID' render={(props) => <MovieDetails 
                                                         {...props} 
                                                         addToFavorites={this.addToFavorites} 
                                                         removeFromFavorites={this.removeFromFavorites} 
-                                                        currentFavoriteMovies={this.state.favoriteMovies.map(movie => movie.title)}/>} />
+                                                        currentFavoriteMoviesTitles={this.state.favoriteMovies.map(movie => movie.title)}
+                                                        currentFavoriteMovies={this.state.favoriteMovies}
+                                                        />} />
         <Route path='/films/:filmID/characters' component={CharactersList} />
       </>
     )

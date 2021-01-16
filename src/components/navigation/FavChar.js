@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 
 export const FavChar = (props) => {
 
-    return (<>
+    return (
+    <>
         { props.favoriteCharacters &&
             <NavDropdown title="Favorite Characters" id="basic-nav-dropdown" >
                 <p className="mx-4"><em>Find your favorites here</em></p>
