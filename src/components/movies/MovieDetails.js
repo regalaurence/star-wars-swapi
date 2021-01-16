@@ -7,7 +7,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Image from 'react-bootstrap/Image'
-import { render } from '../../util';
+import { renderComponent, populateInfo } from '../../util';
 import './MovieDetails.css'
 import { ToggleFav } from '../navigation';
 
@@ -18,13 +18,20 @@ export class MovieDetails extends React.Component {
     state = {
         currentFilmID: null,
         currentFilm: {},
-        characters: [],
         currentFilmImg: '',
         charLoading: true,
         filmInfoLoading: true,
         charError: false,
         filmError: false,
-        isFavorite: false
+        isFavorite: false,
+        characters: {
+            items: [],
+            status: {
+                error: false,
+                isNotEmpty: true,
+                loading: false
+            }
+        }, 
     }
 
     componentDidMount() {
@@ -48,12 +55,13 @@ export class MovieDetails extends React.Component {
                     currentFilmImg: "/images/movies/" + filmID + ".jpg",
                     filmInfoLoading: false
                 })
-                this.populateCharacters(response.data.characters)
                 if (this.props.currentFavoriteMoviesTitles.includes(this.state.currentFilm.title)) {
                     this.setState({
                         isFavorite : true
                     })
                 }
+                return populateInfo('characters', response.data.characters, this)
+
             })
             .catch((error) => {
                 this.setState({
@@ -101,6 +109,7 @@ export class MovieDetails extends React.Component {
     }
 
     render() {
+        console.log("THE CHARACRERS" + this.state.characters.items)
   
         return (
             <>
@@ -108,7 +117,7 @@ export class MovieDetails extends React.Component {
                     <Col><h1>{this.state.currentFilm.title}</h1></Col>
                 </Row>
                 {/* let's check the states and render accordingly */}
-                {render(this.state.filmInfoLoading, this.state.filmError,
+                {renderComponent(this.state.filmInfoLoading, this.state.filmError,
                     <><Container className="movie-details-container text-center mx-auto">
                         <div className="left-part-lg">
                             <Row>
@@ -128,11 +137,13 @@ export class MovieDetails extends React.Component {
                                 <Col>{this.state.currentFilm.episode_id}</Col>
                             </Row>
                             <hr></hr>
+                            {this.state.characters.items && 
                             <CharactersList
-                                   charLoading={this.state.charLoading}
-                                   charError={this.state.charError}
-                                   characters={this.state.characters}
+                                   charLoading={this.state.characters.status.loading}
+                                   charError={this.state.characters.error}
+                                   characters={this.state.characters.items}
                             />
+                            }
                         </div>
                     </Container>
                         <Container className="description">

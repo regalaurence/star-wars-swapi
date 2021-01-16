@@ -3,7 +3,7 @@ import './MoviesList.css'
 import axios from 'axios'
 import { MovieTitle } from '.'
 import Container from 'react-bootstrap/Container'
-import { render } from '../../util'
+import { renderComponent } from '../../util'
 
 //show info liek laoding
 export class MovieList extends React.Component {
@@ -35,7 +35,7 @@ export class MovieList extends React.Component {
       <Container fluid className="text-center">
         <h1 className="m-4">Pick Star Wars Movies</h1>
         {/* let check the states and render accordingly */}
-        {render(this.state.isLoading, this.state.isError,
+        {renderComponent(this.state.isLoading, this.state.isError,
           <div className="mx-auto carddeck">
             {this.state.films.map((film) =>
               <MovieTitle

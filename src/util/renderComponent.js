@@ -1,7 +1,7 @@
 import React from 'react' 
 import Container from 'react-bootstrap/Container'
 
-export const render = (isLoading, isError, component) => {
+export const renderComponent = (isLoading, isError, component) => {
     if (isLoading) {
         return (
             <Container className="text-center">

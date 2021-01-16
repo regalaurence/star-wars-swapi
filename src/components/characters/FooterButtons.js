@@ -7,9 +7,9 @@ import { ToggleFav } from '../navigation'
 export const FooterButtons = (props) => {
 
     return (
-        <Container className="text-center">
+        <Container className="text-center my-3">
             <footer>
-                <Link to={"/"}><Button variant="dark" className="my-2">Back to films</Button></Link>
+                <Link to={"/"}><Button variant="dark">Back to films</Button></Link>
                 <ToggleFav
                     isFavorite={props.isFavorite}
                     toggleFavoriteHandler={props.toggleFavoriteHandler}

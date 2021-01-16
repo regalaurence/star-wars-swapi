@@ -5,7 +5,6 @@ import { CharactersList, CharacterDetails } from './components/characters'
 import { Route } from 'react-router-dom';
 import { NavigationBar } from './components/navigation'
 
-// use the initial state to show info to users 
 export class App extends React.Component {
   constructor(props) {
     super(props)
@@ -17,31 +16,24 @@ export class App extends React.Component {
     this.removeObjFromFavoriteMovies = this.removeObjFromFavoriteMovies.bind(this)
     this.removeObjFromFavoriteChar = this.removeObjFromFavoriteChar.bind(this)
     this.setLocalStorage = this.setLocalStorage.bind(this);
+    // persist favorites 
     window.onbeforeunload = this.setLocalStorage
   }
 
   componentDidMount() {
-    if (localStorage.getItem('favoriteMovies')) {
-      let favoriteMovies = JSON.parse(localStorage.getItem('favoriteMovies'))
-      this.setState({
-        favoriteMovies : favoriteMovies
-      })
-    }
-    else {
-      this.setState({
-        favoriteMovies : []
-      })
-    }
+    this.checkLocalStorageAndSetStates('favoriteMovies')
+    this.checkLocalStorageAndSetStates('favoriteCharacters')
+  }
 
-    if (localStorage.getItem('favoriteCharacters')) {
-      let favoriteCharacters = JSON.parse(localStorage.getItem('favoriteCharacters'))
+  checkLocalStorageAndSetStates(itemToGet) {
+    if (localStorage.getItem(itemToGet)) {
       this.setState({
-        favoriteCharacters : favoriteCharacters
+        [itemToGet] : JSON.parse(localStorage.getItem(itemToGet))
       })
     }
     else {
       this.setState({
-        favoriteCharacters : []
+        [itemToGet] : []
       })
     }
   }

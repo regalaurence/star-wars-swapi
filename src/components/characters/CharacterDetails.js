@@ -5,100 +5,130 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { CharFilmList, CharVehiclesList, CharStarshipsList, CharSpecies, FooterButtons } from './';
-import { render } from '../../util'
+import { renderComponent, populateInfo } from '../../util'
 
 export class CharacterDetails extends React.Component {
 
-
     state = {
-        character: {},
-        isCharLoading: true,
-        isCharError: false,
-        isFavorite: false,
-        films: [],
-        areFilmsLoading: true,
-        areFilmsError: false,
-        areThereFilms: true,
-        vehicles: [],
-        areVehiclesLoading: true,
-        areVehiclesError: false,
-        areThereVehicles: false,
-        starships: [],
-        areStarshipsLoading: true,
-        areStarshipsError: false,
-        areThereStarships: false,
-        species: [],
-        areSpeciesLoading: true,
-        areSpeciesError: false,
-        areThereSpecies: false,
-        homeworld: [],
-        areHomeworldLoading: true,
-        areHomeworldError: false,
-        areThereHomeworld: false,
+        character: {
+            item: {},
+            status: {
+                error: false,
+                isNotEmpty: false,
+                loading: true,
+                isFavorite: false
+            }
+        },
+        films: {
+            items: [],
+            status: {
+                error: false,
+                isNotEmpty: false,
+                loading: true
+            }
+        },
+        vehicles: {
+            items: [],
+            status: {
+                error: false,
+                isNotEmpty: false,
+                loading: true
+            }
+        },
+        starships: {
+            items: [],
+            status: {
+                error: false,
+                isNotEmpty: false,
+                loading: true
+            }
+        },
+        species: {
+            items: [],
+            status: {
+                error: false,
+                isNotEmpty: false,
+                loading: true
+            }
+        },
+        homeworld: {
+            items: [],
+            status: {
+                error: false,
+                isNotEmpty: false,
+                loading: true
+            }
+        },
     }
 
     componentDidMount() {
-        
         axios.get("https://swapi.dev/api/people/" + this.props.match.params.charID)
             .then(response => {
                 const isFavorite = !!this.props.currentFavoriteChars.some(item => response.data.name === item.name)
                 this.setState({
-                    character: response.data,
-                    isCharLoading: false,
-                    isFavorite 
+                    character: {
+                        item: response.data,
+                        status: {
+                            loading: false,
+                            isNotEmpty: true,
+                            isFavorite
+                        }
+                    },
                 })
-                this.populateInfo("films", "areFilmsLoading", "areFilmsError", "areThereFilms", this.state.character.films)
-                this.populateInfo("vehicles", "areVehiclesLoading", "areVehiclesError", "areThereVehicles", this.state.character.vehicles)
-                this.populateInfo("starships", "areStarshipsLoading", "areStarshipsError", "areThereStarships", this.state.character.starships)
-                this.populateInfo("species", "areSpeciesLoading", "areSpeciesError", "areThereSpecies", this.state.character.species)
-                
+                return populateInfo("films", this.state.character.item.films, this)
+                .then(() => {
+                    return populateInfo("vehicles", this.state.character.item.vehicles, this)
+                })
+                .then(() => {
+                    return populateInfo("starships", this.state.character.item.starships, this)
+                })
+                .then(() => {
+                    return populateInfo("species", this.state.character.item.species, this)
+                })
+        
             })
             .catch((error) => {
                 this.setState({
-                    isCharError: true
+                    character: {
+                        status: {
+                            error: true,
+                        }
+                    },
                 })
             })
     }
 
     componentDidUpdate(prevProps) {
         if (prevProps.match.params.charID !== this.props.match.params.charID) {
-        this.componentDidMount()
+            this.componentDidMount()
         }
-      }
-
-    populateInfo = (stateToPopulate, isThisLoading, isThisError, areThereAny, arrayOfURLs) => {
-        let promises = arrayOfURLs.map(url =>
-            axios.get(url)
-        )
-        return Promise.all(promises)
-            .then((response) => {
-                const toNames = response.map(e => e.data)
-                if (toNames.length > 0) {
-                    this.setState({
-                        [stateToPopulate]: toNames,
-                        [isThisLoading]: false,
-                        [areThereAny]: true,
-                    })
-                }
-            })
-            .catch((error) => {
-                this.setState({
-                    [isThisError]: true
-                })
-            })
     }
 
     toggleFavoriteHandler = () => {
-        if (!this.props.currentFavoriteCharsNames.includes(this.state.character.name)) {
-            this.props.addToFavorites("favoriteCharacters", this.props.currentFavoriteChars, this.state.character)
+        if (!this.props.currentFavoriteCharsNames.includes(this.state.character.item.name)) {
+            this.props.addToFavorites("favoriteCharacters", this.props.currentFavoriteChars, this.state.character.item)
             this.setState({
-                isFavorite: true
+                character: {
+                    ...this.state.character,
+                    status: {
+                        ...this.state.character.status,
+                        isFavorite: true,
+                       
+                        
+                    }
+                },
             })
         }
         else {
-            this.props.removeObjFromFavoriteChar("favoriteCharacters", this.props.currentFavoriteChars, this.state.character.name)
+            this.props.removeObjFromFavoriteChar("favoriteCharacters", this.props.currentFavoriteChars, this.state.character.item.name)
             this.setState({
-                isFavorite: false
+                character: {
+                    ...this.state.character,
+                    status: {
+                        ...this.state.character.status,
+                        isFavorite: false,
+                    }
+                },
             })
         }
     }
@@ -106,14 +136,14 @@ export class CharacterDetails extends React.Component {
     render() {
 
         let charImgSrc = "/images/characters/" + this.props.match.params.charID + ".jpg"
-        // console.log(charImgSrc)
 
         return (
             <>
-                {this.state.character && render(this.state.isCharLoading, this.state.isCharError,
+                {this.state.character.item && 
+                renderComponent(this.state.character.status.loading, this.state.character.status.error,
                     <>
                         <Row className="p-2 m-2 text-center mx-auto">
-                            <Col><h1>{this.state.character.name}</h1></Col>
+                            <Col><h1>{this.state.character.item.name}</h1></Col>
                         </Row>
                         <Container className="movie-details-container text-center mx-auto">
                             <div className="left-part-lg">
@@ -123,66 +153,79 @@ export class CharacterDetails extends React.Component {
                             </div>
                             <div className="right-part-lg">
                                 <Row className="p-3">
-                                    <Col><h2>About {this.state.character.name}</h2></Col>
+                                    <Col><h2>About {this.state.character.item.name}</h2></Col>
                                 </Row>
-                                <CharSpecies
-                                    areThereSpecies={this.state.areThereSpecies}
-                                    areSpeciesLoading={this.state.areSpeciesLoading}
-                                    areSpeciesError={this.state.areSpeciesError}
-                                    species={this.state.species}
-                                />
-                               
+                                {this.state.species.status.isNotEmpty && 
+                                    <CharSpecies
+                                        areThereSpecies={this.state.species.status.isNotEmpty}
+                                        areSpeciesLoading={this.state.species.status.loading}
+                                        areSpeciesError={this.state.species.status.error}
+                                        species={this.state.species.items}
+                                    />
+                                }
                                 <Row className="text-left">
                                     <Col><p><strong>Gender</strong></p></Col>
-                                    <Col>{this.state.character.gender}</Col>
+                                    <Col>{this.state.character.item.gender}</Col>
                                 </Row>
                                 <Row className="text-left">
                                     <Col><p><strong>Birth Year</strong></p></Col>
-                                    <Col>{this.state.character.birth_year}</Col>
+                                    <Col>{this.state.character.item.birth_year}</Col>
                                 </Row>
                                 <Row className="text-left">
                                     <Col><p><strong>Eye color</strong></p></Col>
-                                    <Col>{this.state.character.eye_color}</Col>
+                                    <Col>{this.state.character.item.eye_color}</Col>
                                 </Row>
                                 <Row className="text-left">
                                     <Col><p><strong>Skin Color</strong></p></Col>
-                                    <Col>{this.state.character.skin_color}</Col>
+                                    <Col>{this.state.character.item.skin_color}</Col>
                                 </Row>
                                 <Row className="text-left">
                                     <Col><p><strong>Hair Color</strong></p></Col>
-                                    <Col>{this.state.character.hair_color}</Col>
+                                    <Col>{this.state.character.item.hair_color}</Col>
                                 </Row>
                                 <Row className="text-left">
-                                    <Col><p><strong>Height and weight</strong></p></Col>
-                                    <Col>{this.state.character.height}cm, {this.state.character.mass}kg</Col>
+                                    <Col><p><strong>Height in cm</strong></p></Col>
+                                    <Col>{this.state.character.item.height}</Col>
                                 </Row>
-                                <CharVehiclesList
-                                    areThereVehicles={this.state.areThereVehicles}
-                                    areVehiclesLoading={this.state.areVehiclesLoading}
-                                    areVehiclesError={this.state.areVehiclesError}
-                                    vehicles={this.state.vehicles}
-                                />
-                                <CharStarshipsList
-                                    areThereStarships={this.state.areThereStarships}
-                                    areStarshipsLoading={this.state.areStarshipsLoading}
-                                    areStarshipsError={this.state.areStarshipsError}
-                                    starships={this.state.starships}
-                                />
-                                <hr/>
-                                <CharFilmList
-                                    areFilmsLoading={this.state.areFilmsLoading}
-                                    areFilmsError={this.state.areFilmsError}
-                                    films={this.state.films}
-                                />
+                                <Row className="text-left">
+                                    <Col><p><strong>Weight in kg</strong></p></Col>
+                                    <Col>{this.state.character.item.mass}</Col>
+                                </Row>
+                                {this.state.vehicles.status.isNotEmpty &&
+                                    <CharVehiclesList
+                                        areThereVehicles={this.state.vehicles.status.isNotEmpty}
+                                        areVehiclesLoading={this.state.vehicles.status.loading}
+                                        areVehiclesError={this.state.vehicles.status.error}
+                                        vehicles={this.state.vehicles.items}
+                                    />
+                                }
+                                {this.state.starships.status.isNotEmpty &&
+                                    <CharStarshipsList
+                                        areThereStarships={this.state.starships.status.isNotEmpty}
+                                        areStarshipsLoading={this.state.starships.status.loading}
+                                        areStarshipsError={this.state.starships.status.error}
+                                        starships={this.state.starships.items}
+                                    />
+                                }
+                                <hr />
+                                {this.state.films.status.isNotEmpty &&
+                                    <CharFilmList
+                                        areFilmsLoading={this.state.films.status.loading}
+                                        areFilmsError={this.state.films.status.error}
+                                        films={this.state.films.items}
+                                    />
+                                }
                             </div>
                         </Container>
                         <Container className="text-center">
-                            <FooterButtons
-                                    isFavorite={this.state.isFavorite}
-                                    toggleFavoriteHandler={this.toggleFavoriteHandler}
-                                    currentFavorites={this.props.currentFavoriteChars}
-                                    toAdd={this.state.character.name}
+                            {this.state.character.item &&
+                                <FooterButtons
+                                isFavorite={this.state.character.status.isFavorite}
+                                toggleFavoriteHandler={this.toggleFavoriteHandler}
+                                currentFavorites={this.props.currentFavoriteChars}
+                                toAdd={this.state.character.item.name}
                             />
+                            }
                         </Container>
                     </>
                 )
