@@ -32,6 +32,11 @@ export class CharacterDetails extends React.Component {
                     isCharLoading: false
                 })
                 this.populateFilms(this.state.character.films)
+                if (this.props.currentFavoriteChars.includes(this.state.character.name)) {
+                    this.setState({
+                        isFavorite : true
+                    })
+                }
             })
             .catch((error) => {
                 this.setState({
@@ -39,6 +44,7 @@ export class CharacterDetails extends React.Component {
                 })
             })
     }
+
 
     populateFilms = (arrayOfFilmsURL) => {
         let filmPromises = arrayOfFilmsURL.map(filmURL =>
@@ -61,11 +67,19 @@ export class CharacterDetails extends React.Component {
             })
     }
 
-    addToFavoriteHandler = () => {
-        this.props.addCharToFavorites(this.state.character)
-        this.setState ({
-            isFavorite: true
-        })
+    toggleFavoriteHandler = () => {
+        if (!this.props.currentFavoriteChars.includes(this.state.character.name)) {
+            this.props.addCharToFavorites(this.state.character)
+            this.setState({
+                isFavorite : true
+            })
+        }
+        else {
+            this.props.removeCharFromFavorites(this.props.currentFavoriteChars, this.state.character.name)
+            this.setState({
+                isFavorite : false
+            })
+        }
     }
 
 
@@ -130,7 +144,12 @@ export class CharacterDetails extends React.Component {
                         <Container className="text-center">
                             <footer>
                                 <Link to={"/"}><Button variant="dark" className="my-2">Back to films</Button></Link>
-                                <ToggleFav isFavorite={this.state.isFavorite} addToFavoriteHandler={this.addToFavoriteHandler}></ToggleFav>
+                                <ToggleFav 
+                                isFavorite={this.state.isFavorite} 
+                                toggleFavoriteHandler={this.toggleFavoriteHandler} 
+                                currentFavorites={this.props.currentFavoriteChars}
+                                toAdd={this.state.character.name}
+                                 />
                             </footer>
                         </Container>
                     </>

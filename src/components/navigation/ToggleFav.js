@@ -5,11 +5,11 @@ export const ToggleFav = (props) => {
 
     // isFavorite={this.state.isFavorite} 
     // addToFavoriteHandler={this.addToFavoriteHandler} 
-    // currentFavorites={this.props.currentFavorites}
+    // currentFavoriteChars={this.props.currentFavoriteChars}
     // toAdd={this.state.currentFilm.title}
 
     return (
-        <> { props.isFavorite ? <Button onClick={props.toggleFavoriteHandler} className="m-2">Added to favorites</Button>
+        <> { props.isFavorite ? <Button onClick={props.toggleFavoriteHandler} variant="danger" className="m-2">Remove from favorites</Button>
             :
             <Button onClick={props.toggleFavoriteHandler} variant="dark" className="m-2">Add to favorite</Button>
         }

@@ -31,6 +31,12 @@ export class MovieDetails extends React.Component {
         this.getFilmDetails()
     }
 
+    componentDidUpdate(prevProps) {
+        if (prevProps.match.params.filmID !== this.props.match.params.filmID) {
+        this.getFilmDetails()
+        }
+      }
+
     getFilmDetails() {
         const filmID = this.props.match.params.filmID
         const url = "https://swapi.dev/api/films/" + filmID + "/";
@@ -43,7 +49,7 @@ export class MovieDetails extends React.Component {
                     filmInfoLoading: false
                 })
                 this.populateCharacters(response.data.characters)
-                if (this.props.currentFavorites.includes(this.state.currentFilm.title)) {
+                if (this.props.currentFavoriteMovies.includes(this.state.currentFilm.title)) {
                     this.setState({
                         isFavorite : true
                     })
@@ -57,7 +63,7 @@ export class MovieDetails extends React.Component {
     }
 
     populateCharacters = (arrayOfCharURL) => {
-        console.log(arrayOfCharURL)
+        // console.log(arrayOfCharURL)
         let charPromises = arrayOfCharURL.map(charURL =>
             axios.get(charURL)
         )
@@ -78,18 +84,18 @@ export class MovieDetails extends React.Component {
     }
 
     toggleFavoriteHandler = () => {
-        if (!this.props.currentFavorites.includes(this.state.currentFilm.title)) {
+        if (!this.props.currentFavoriteMovies.includes(this.state.currentFilm.title)) {
             this.props.addMovieToFavorites(this.state.currentFilm)
             this.setState({
                 isFavorite : true
             })
         }
-        // else {
-        //     this.props.removeMovieFromFavorites(this.props.currentFavorites, this.state.currentFilm)
-        //     this.setState({
-        //       isFavorite : false
-        //     })
-        //   } 
+        else {
+            this.props.removeMovieFromFavorites(this.props.currentFavoriteMovies, this.state.currentFilm.title)
+            this.setState({
+                isFavorite : false
+            })
+        }
     }
 
     render() {
@@ -147,7 +153,7 @@ export class MovieDetails extends React.Component {
                                 <ToggleFav 
                                 isFavorite={this.state.isFavorite} 
                                 toggleFavoriteHandler={this.toggleFavoriteHandler} 
-                                currentFavorites={this.props.currentFavorites}
+                                currentFavorites={this.props.currentFavoriteMovies}
                                 toAdd={this.state.currentFilm.title}
                                  />
                             </footer>

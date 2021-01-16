@@ -5,7 +5,6 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { getId, render } from '../../util';
-import { Link } from 'react-router-dom';
 import { LinkContainer } from "react-router-bootstrap";
 
 export class Navigation extends React.Component {
@@ -45,8 +44,8 @@ export class Navigation extends React.Component {
                             this.state.allMovies
                                 .map(movie => <LinkContainer to={"/films/" + getId(movie.url)}><NavDropdown.Item>{movie.title}</NavDropdown.Item></LinkContainer>))}
                         </NavDropdown>
-                        <FavMovies favoriteMovies={this.props.favoriteMovies}/>
-                        <FavChar favoriteCharacters={this.props.favoriteCharacters}/>
+                        {this.props.hasFavoriteMovies && <FavMovies favoriteMovies={this.props.favoriteMovies}/>}
+                        {this.props.hasFavoriteChars && <FavChar favoriteCharacters={this.props.favoriteCharacters}/>}
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
