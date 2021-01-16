@@ -2,13 +2,10 @@ import React from 'react'
 import axios from 'axios'
 import Image from 'react-bootstrap/Image'
 import Container from 'react-bootstrap/Container'
-import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import { Link } from 'react-router-dom';
 import { CharFilmList, CharVehiclesList, CharStarshipsList, CharSpecies, FooterButtons } from './';
 import { render } from '../../util'
-import { ToggleFav } from '../navigation'
 
 export class CharacterDetails extends React.Component {
 
@@ -41,21 +38,20 @@ export class CharacterDetails extends React.Component {
     }
 
     componentDidMount() {
+        
         axios.get("https://swapi.dev/api/people/" + this.props.match.params.charID)
             .then(response => {
+                const isFavorite = !!this.props.currentFavoriteChars.some(item => response.data.name === item.name)
                 this.setState({
                     character: response.data,
-                    isCharLoading: false
+                    isCharLoading: false,
+                    isFavorite 
                 })
                 this.populateInfo("films", "areFilmsLoading", "areFilmsError", "areThereFilms", this.state.character.films)
                 this.populateInfo("vehicles", "areVehiclesLoading", "areVehiclesError", "areThereVehicles", this.state.character.vehicles)
                 this.populateInfo("starships", "areStarshipsLoading", "areStarshipsError", "areThereStarships", this.state.character.starships)
                 this.populateInfo("species", "areSpeciesLoading", "areSpeciesError", "areThereSpecies", this.state.character.species)
-                if (this.props.currentFavoriteChars.includes(this.state.character.name)) {
-                    this.setState({
-                        isFavorite: true
-                    })
-                }
+                
             })
             .catch((error) => {
                 this.setState({
@@ -76,7 +72,6 @@ export class CharacterDetails extends React.Component {
         )
         return Promise.all(promises)
             .then((response) => {
-                console.log('res', response)
                 const toNames = response.map(e => e.data)
                 if (toNames.length > 0) {
                     this.setState({
