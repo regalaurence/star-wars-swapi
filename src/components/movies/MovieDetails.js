@@ -85,13 +85,13 @@ export class MovieDetails extends React.Component {
 
     toggleFavoriteHandler = () => {
         if (!this.props.currentFavoriteMovies.includes(this.state.currentFilm.title)) {
-            this.props.addMovieToFavorites(this.state.currentFilm)
+            this.props.addToFavorites("favoriteMovies", "hasFavoriteMovies", this.props.currentFavoriteMovies, this.state.currentFilm)
             this.setState({
                 isFavorite : true
             })
         }
         else {
-            this.props.removeMovieFromFavorites(this.props.currentFavoriteMovies, this.state.currentFilm.title)
+            this.props.removeFromFavorites("favoriteMovies", this.props.currentFavoriteMovies, this.state.currentFilm.title)
             this.setState({
                 isFavorite : false
             })
@@ -101,9 +101,7 @@ export class MovieDetails extends React.Component {
     render() {
 
         //we render these components down under, put here for readability
-        let eachCharName = this.state.characters
-            .map(char => <CharactersList currentFilmID={this.state.currentFilmID} name={char.name} charURL={char.url} />)
-
+  
         return (
             <>
                 <Row className="p-2 m-2 text-center mx-auto">
@@ -130,11 +128,11 @@ export class MovieDetails extends React.Component {
                                 <Col>{this.state.currentFilm.episode_id}</Col>
                             </Row>
                             <hr></hr>
-                            <Row className="text-left">
-                                <Col><p><strong>Characters</strong></p></Col>
-                                {/* lets check the states of characters data fetching and render accordingly */}
-                                <Col>{render(this.state.charLoading, this.state.charError, eachCharName)}</Col>
-                            </Row>
+                            <CharactersList
+                                   charLoading={this.state.charLoading}
+                                   charError={this.state.charError}
+                                   characters={this.state.characters}
+                            />
                         </div>
                     </Container>
                         <Container className="description">

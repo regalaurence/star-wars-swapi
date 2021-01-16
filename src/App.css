@@ -3,3 +3,7 @@
 h1 {
   font-family: impact;
 }
+
+li {
+  list-style: none;
+}

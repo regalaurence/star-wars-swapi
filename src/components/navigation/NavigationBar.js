@@ -3,11 +3,10 @@ import axios from 'axios'
 import { FavMovies, FavChar } from '.'
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import { getId, render } from '../../util';
 import { LinkContainer } from "react-router-bootstrap";
+import { AllMovies } from '.';
 
-export class Navigation extends React.Component {
+export class NavigationBar extends React.Component {
 
     state = {
         allMovies: [],
@@ -39,13 +38,13 @@ export class Navigation extends React.Component {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
-                        <NavDropdown title="Movies" id="basic-nav-dropdown">
-                            {render(this.state.isLoading, this.state.isError,
-                            this.state.allMovies
-                                .map(movie => <LinkContainer to={"/films/" + getId(movie.url)}><NavDropdown.Item>{movie.title}</NavDropdown.Item></LinkContainer>))}
-                        </NavDropdown>
-                        {this.props.hasFavoriteMovies && <FavMovies favoriteMovies={this.props.favoriteMovies}/>}
-                        {this.props.hasFavoriteChars && <FavChar favoriteCharacters={this.props.favoriteCharacters}/>}
+                        <AllMovies 
+                            isLoading={this.state.isLoading}
+                            isError={this.state.isError}
+                            allMovies={this.state.allMovies}
+                        />
+                        <FavMovies favoriteMovies={this.props.favoriteMovies}/>
+                        <FavChar favoriteCharacters={this.props.favoriteCharacters}/>
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>

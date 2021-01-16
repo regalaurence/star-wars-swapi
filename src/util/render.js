@@ -1,9 +1,16 @@
+import React from 'react' 
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Col'
+import Container from 'react-bootstrap/Container'
+
 export const render = (isLoading, isError, component) => {
     if (isLoading) {
         return (
-            <div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
+            <Container className="text-center">
+            <div className="spinner-border mx-auto" role="status">
+                <span className="sr-only">Loading...</span>
             </div>
+            </Container>
         )
     }
     if (isError) {

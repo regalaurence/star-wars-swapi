@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import { getId } from '../../util';
+import { getId, render } from '../../util';
 
 // received params :
 // props.name : for each char, the char name
@@ -10,16 +10,16 @@ import { getId } from '../../util';
 
 export const CharactersList = (props) => {
 
-        let id = getId(props.charURL)
-        let charLink = "/people/" + id 
 
         return (
-                <Row>
-                     <Col>
-                     <Link to={charLink}>
-                       {props.name}
-                    </Link>
-                    </Col>
-                </Row>
+                <>
+                        <Row className="text-left">
+                                <Col><p><strong>Characters</strong></p></Col>
+                                {/* lets check the states of characters data fetching and render accordingly */}
+                                <Col>{render(props.charLoading, props.charError, props.characters
+                                        .map(char => <Link to={"/people/" + getId(char.url)}><li>{char.name}</li></Link>))}</Col>
+                        </Row>
+                </>
         )
-    }
+}
+

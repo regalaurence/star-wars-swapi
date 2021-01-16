@@ -7,7 +7,7 @@ export const FavMovies = (props) => {
     
     return (
     
-        <NavDropdown title="Favorites Movies" id="basic-nav-dropdown">
+        <NavDropdown title="Favorite Movies" id="basic-nav-dropdown">
             <p className="mx-4"><em>Find your favorites here</em></p>
             {props.favoriteMovies.map(movie => <NavDropdown.Item as={Link} to={"/films/" + getId(movie.url)}>{movie.title}</NavDropdown.Item>)}
         </NavDropdown>

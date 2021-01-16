@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { Link } from 'react-router-dom';
-import { CharFilmList } from './';
+import { CharFilmList, CharVehiclesList, CharStarshipsList, CharSpecies } from './';
 import { render } from '../../util'
 import { ToggleFav } from '../navigation'
 
@@ -16,12 +16,29 @@ export class CharacterDetails extends React.Component {
     // props.charURL => the char onwhich the user clicked 
     state = {
         character: {},
+        isCharLoading: true,
+        isCharError: false,
         isFavorite: false,
         films: [],
-        isCharLoading: true,
         areFilmsLoading: true,
-        isCharError: false,
-        areFilmsError: false
+        areFilmsError: false,
+        areThereFilms: true,
+        vehicles: [],
+        areVehiclesLoading: true,
+        areVehiclesError: false,
+        areThereVehicles: false,
+        starships: [],
+        areStarshipsLoading: true,
+        areStarshipsError: false,
+        areThereStarships: false,
+        species: [],
+        areSpeciesLoading: true,
+        areSpeciesError: false,
+        areThereSpecies: false,
+        homeworld: [],
+        areHomeworldLoading: true,
+        areHomeworldError: false,
+        areThereHomeworld: false,
     }
 
     componentDidMount() {
@@ -31,10 +48,13 @@ export class CharacterDetails extends React.Component {
                     character: response.data,
                     isCharLoading: false
                 })
-                this.populateFilms(this.state.character.films)
+                this.populateInfo("films", "areFilmsLoading", "areFilmsError", "areThereFilms", this.state.character.films)
+                this.populateInfo("vehicles", "areVehiclesLoading", "areVehiclesError", "areThereVehicles", this.state.character.vehicles)
+                this.populateInfo("starships", "areStarshipsLoading", "areStarshipsError", "areThereStarships", this.state.character.starships)
+                this.populateInfo("species", "areSpeciesLoading", "areSpeciesError", "areThereSpecies", this.state.character.species)
                 if (this.props.currentFavoriteChars.includes(this.state.character.name)) {
                     this.setState({
-                        isFavorite : true
+                        isFavorite: true
                     })
                 }
             })
@@ -46,48 +66,49 @@ export class CharacterDetails extends React.Component {
     }
 
 
-    populateFilms = (arrayOfFilmsURL) => {
-        let filmPromises = arrayOfFilmsURL.map(filmURL =>
-            axios.get(filmURL)
+    populateInfo = (stateToPopulate, isThisLoading, isThisError, areThereAny, arrayOfURLs) => {
+        let promises = arrayOfURLs.map(url =>
+            axios.get(url)
         )
-
-        return Promise.all(filmPromises)
+        return Promise.all(promises)
             .then((response) => {
                 console.log('res', response)
-                const films = response.map(film => film.data)
-                this.setState({
-                    films: films,
-                    areFilmsLoading: false
-                })
+                const toNames = response.map(e => e.data)
+                if (toNames.length > 0) {
+                    this.setState({
+                        [stateToPopulate]: toNames,
+                        [isThisLoading]: false,
+                        [areThereAny]: true,
+                    })
+                }
             })
             .catch((error) => {
                 this.setState({
-                    areFilmsError: true
+                    [isThisError]: true
                 })
             })
     }
 
     toggleFavoriteHandler = () => {
         if (!this.props.currentFavoriteChars.includes(this.state.character.name)) {
-            this.props.addCharToFavorites(this.state.character)
+            this.props.addToFavorites("favoriteCharacters", "hasFavoriteChars", this.props.currentFavoriteChars, this.state.character)
             this.setState({
-                isFavorite : true
+                isFavorite: true
             })
         }
         else {
-            this.props.removeCharFromFavorites(this.props.currentFavoriteChars, this.state.character.name)
+            this.props.removeFromFavorites("favoriteCharacters", this.props.currentFavoriteChars, this.state.character.name)
             this.setState({
-                isFavorite : false
+                isFavorite: false
             })
         }
     }
-
 
     render() {
 
         let charImgSrc = "/images/characters/" + this.props.match.params.charID + ".jpg"
         // console.log(charImgSrc)
-    
+
         return (
             <>
                 {this.state.character && render(this.state.isCharLoading, this.state.isCharError,
@@ -105,7 +126,13 @@ export class CharacterDetails extends React.Component {
                                 <Row className="p-3">
                                     <Col><h2>About {this.state.character.name}</h2></Col>
                                 </Row>
-
+                                <CharSpecies
+                                    areThereSpecies={this.state.areThereSpecies}
+                                    areSpeciesLoading={this.state.areSpeciesLoading}
+                                    areSpeciesError={this.state.areSpeciesError}
+                                    species={this.state.species}
+                                />
+                               
                                 <Row className="text-left">
                                     <Col><p><strong>Gender</strong></p></Col>
                                     <Col>{this.state.character.gender}</Col>
@@ -130,26 +157,35 @@ export class CharacterDetails extends React.Component {
                                     <Col><p><strong>Height and weight</strong></p></Col>
                                     <Col>{this.state.character.height}cm, {this.state.character.mass}kg</Col>
                                 </Row>
-                                <hr></hr>
-                                <Row className="text-left">
-                                    <Col><p><strong>Movies</strong></p></Col>
-                                    <Col> {/* lets check the loading status and render accordingly */}
-                                        {render(this.state.areFilmsLoading, this.state.areFilmsError, 
-                                        this.state.films.map(film => <CharFilmList title={film.title} filmURL={film.url} />)
-                                        )}  
-                                    </Col>
-                                </Row>
+                                <CharVehiclesList
+                                    areThereVehicles={this.state.areThereVehicles}
+                                    areVehiclesLoading={this.state.areVehiclesLoading}
+                                    areVehiclesError={this.state.areVehiclesError}
+                                    vehicles={this.state.vehicles}
+                                />
+                                <CharStarshipsList
+                                    areThereStarships={this.state.areThereStarships}
+                                    areStarshipsLoading={this.state.areStarshipsLoading}
+                                    areStarshipsError={this.state.areStarshipsError}
+                                    starships={this.state.starships}
+                                />
+                                <hr/>
+                                <CharFilmList
+                                    areFilmsLoading={this.state.areFilmsLoading}
+                                    areFilmsError={this.state.areFilmsError}
+                                    films={this.state.films}
+                                />
                             </div>
                         </Container>
                         <Container className="text-center">
                             <footer>
                                 <Link to={"/"}><Button variant="dark" className="my-2">Back to films</Button></Link>
-                                <ToggleFav 
-                                isFavorite={this.state.isFavorite} 
-                                toggleFavoriteHandler={this.toggleFavoriteHandler} 
-                                currentFavorites={this.props.currentFavoriteChars}
-                                toAdd={this.state.character.name}
-                                 />
+                                <ToggleFav
+                                    isFavorite={this.state.isFavorite}
+                                    toggleFavoriteHandler={this.toggleFavoriteHandler}
+                                    currentFavorites={this.props.currentFavoriteChars}
+                                    toAdd={this.state.character.name}
+                                />
                             </footer>
                         </Container>
                     </>

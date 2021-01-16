@@ -3,7 +3,7 @@ import './App.css'
 import { MovieDetails, MovieList } from './components/movies'
 import { CharactersList, CharacterDetails } from './components/characters'
 import { Route } from 'react-router-dom';
-import { Navigation } from './components/navigation'
+import { NavigationBar } from './components/navigation'
 
 // use the initial state to show info to users 
 export class App extends React.Component {
@@ -15,49 +15,30 @@ export class App extends React.Component {
       hasFavoriteChars: false,
       hasFavoriteMovies: false,
     }
-    this.addMovieToFavorites = this.addMovieToFavorites.bind(this)
-    this.addCharToFavorites = this.addCharToFavorites.bind(this)
-    this.removeCharFromFavorites = this.removeCharFromFavorites.bind(this)
-    this.removeMovieFromFavorites = this.removeMovieFromFavorites.bind(this)
-
+    this.addToFavorites = this.addToFavorites.bind(this)
+    this.removeFromFavorites = this.removeFromFavorites.bind(this)
   }
 
-  addCharToFavorites(char) {
-    // console.log('state', this.state)
-    this.setState(
-      { 
-        favoriteCharacters: [...this.state.favoriteCharacters, char],
-        hasFavoriteChars: true
-      }
-    )
-  }
 
-  addMovieToFavorites(movie) {
+  addToFavorites(stateFavtoAdd, hasFavBool, arrayOfFav, favToAdd) {
     // console.log('state', this.state)
     this.setState({ 
-      favoriteMovies: [...this.state.favoriteMovies, movie],
-      hasFavoriteMovies: true 
+      [stateFavtoAdd]: [...arrayOfFav, favToAdd],
+      [hasFavBool]: true 
     })
   }
 
-  removeCharFromFavorites(arrayOfFav, name) {
-    let filteredDeletion = arrayOfFav.filter(fav => fav !== name)
+  removeFromFavorites(stateToChange, arrayOfFav, favToRemove) {
+    let filteredDeletion = arrayOfFav.filter(fav => fav !== favToRemove)
     this.setState({
-      favoriteCharacters: filteredDeletion 
-    })
-  }
-
-  removeMovieFromFavorites(arrayOfFav, title) {
-    let filteredDeletion = arrayOfFav.filter(fav => fav !== title)
-    this.setState({
-      favoriteMovies: filteredDeletion 
+      [stateToChange]: filteredDeletion 
     })
   }
 
   render() {
     return (
       <>
-        <Navigation favoriteMovies={this.state.favoriteMovies} 
+        <NavigationBar favoriteMovies={this.state.favoriteMovies} 
                     favoriteCharacters={this.state.favoriteCharacters} 
                     hasFavoriteChars={this.state.hasFavoriteChars}
                     hasFavoriteMovies={this.state.hasFavoriteMovies}
@@ -66,15 +47,15 @@ export class App extends React.Component {
         <Route exact path='/films' component={MovieList} />
         <Route path='/people/:charID' render={(props) => <CharacterDetails 
                                                           {...props} 
-                                                          addCharToFavorites={this.addCharToFavorites} 
-                                                          removeCharFromFavorites={this.removeCharFromFavorites} 
+                                                          addToFavorites={this.addToFavorites} 
+                                                          removeFromFavorites={this.removeFromFavorites} 
                                                           currentFavoriteChars={this.state.favoriteCharacters.map(char => char.name)}
                                                           
                                                           />} />
         <Route path='/films/:filmID' render={(props) => <MovieDetails 
                                                         {...props} 
-                                                        addMovieToFavorites={this.addMovieToFavorites} 
-                                                        removeMovieFromFavorites={this.removeMovieFromFavorites} 
+                                                        addToFavorites={this.addToFavorites} 
+                                                        removeFromFavorites={this.removeFromFavorites} 
                                                         currentFavoriteMovies={this.state.favoriteMovies.map(movie => movie.title)}/>} />
         <Route path='/films/:filmID/characters' component={CharactersList} />
       </>

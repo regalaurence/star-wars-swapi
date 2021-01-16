@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import { getId } from '../../util';
+import { getId, render } from '../../util';
 
 // This component renders the movies in which the characters appears 
 
@@ -11,17 +11,16 @@ import { getId } from '../../util';
 // props.charurl : for each char, the char URL
 
 export const CharFilmList = (props) => {
-
-        const id = getId(props.filmURL)
-        const movieLink = "/films/" + id;
+        
  
             return (
-                <Row>
-                     <Col>
-                     <Link to={movieLink}>
-                       {props.title}
-                    </Link>
-                    </Col>
-                </Row>
+                <Row className="text-left">
+                <Col><p><strong>Movies</strong></p></Col>
+                <Col> {/* lets check the loading status and render accordingly */}
+                    {render(props.areFilmsLoading, props.areFilmsError, 
+                    props.films.map(film => <li><Link to={"/films/" + getId(film.url)}>{film.title}</Link></li>)
+                    )}  
+                </Col>
+            </Row>
         )
     }
