@@ -18,10 +18,8 @@ export class App extends React.Component {
       hasFavoriteMovies: false,
     }
     this.addToFavorites = this.addToFavorites.bind(this)
-    // this.removeNameFromFavorites = this.removeNameFromFavorites.bind(this)
     this.removeObjFromFavoriteMovies = this.removeObjFromFavoriteMovies.bind(this)
     this.removeObjFromFavoriteChar = this.removeObjFromFavoriteChar.bind(this)
-
   }
 
 
@@ -29,17 +27,8 @@ export class App extends React.Component {
     // console.log('state', this.state)
     this.setState({ 
       [stateKeyFavoritesObj]: [...arrayOfFavObj, favObjToAdd],
-      // [stateKeyFavoriteNames] : [...arrayOfFavNames, nameToAdd],
     })
   }
-
-  // removeNameFromFavorites(stateKeyFavoritesName, arrayOfFavNames, favNameToRemove) {
-  //   let filteredDeletionNames = arrayOfFavNames.filter(fav => fav !== favNameToRemove)
-
-  //   this.setState({
-  //     [stateKeyFavoritesName]: filteredDeletionNames,
-  //   })
-  // }
 
   //left it so to see there is only one parameter to change but how?  if remains so, got to clear off the params
   removeObjFromFavoriteMovies(stateKeyFavoritesObj, arrayOfFavObj, favObjNameToRemove) {

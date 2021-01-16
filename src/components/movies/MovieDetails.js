@@ -93,7 +93,6 @@ export class MovieDetails extends React.Component {
         }
 
         else {
-            // this.props.removeNameFromFavorites("favoriteMoviesTitles", this.props.currentFavoriteMoviesTitles, this.state.currentFilm.title)
             this.props.removeObjFromFavoriteMovies("favoriteMovies", this.props.currentFavoriteMovies, this.state.currentFilm.title)
             this.setState({
                 isFavorite : false
@@ -102,8 +101,6 @@ export class MovieDetails extends React.Component {
     }
 
     render() {
-
-        //we render these components down under, put here for readability
   
         return (
             <>

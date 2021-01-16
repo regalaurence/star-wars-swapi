@@ -13,7 +13,6 @@ import { ToggleFav } from '../navigation'
 export class CharacterDetails extends React.Component {
 
 
-    // props.charURL => the char onwhich the user clicked 
     state = {
         character: {},
         isCharLoading: true,
@@ -65,6 +64,11 @@ export class CharacterDetails extends React.Component {
             })
     }
 
+    componentDidUpdate(prevProps) {
+        if (prevProps.match.params.charID !== this.props.match.params.charID) {
+        this.componentDidMount()
+        }
+      }
 
     populateInfo = (stateToPopulate, isThisLoading, isThisError, areThereAny, arrayOfURLs) => {
         let promises = arrayOfURLs.map(url =>
@@ -97,7 +101,6 @@ export class CharacterDetails extends React.Component {
             })
         }
         else {
-            // this.props.removeNameFromFavorites("favoritesCharactersNames", this.props.currentFavoriteCharsNames, this.state.character.name)
             this.props.removeObjFromFavoriteChar("favoriteCharacters", this.props.currentFavoriteChars, this.state.character.name)
             this.setState({
                 isFavorite: false
