@@ -11,36 +11,37 @@ export class App extends React.Component {
     super(props)
     this.state = {
       favoriteMovies: [],
-      favoriteMoviesTitles: [],
+      // favoriteMoviesTitles: [],
       favoriteCharacters: [],
-      favoritesCharactersNames: [],
+      // favoritesCharactersNames: [],
       hasFavoriteChars: false,
       hasFavoriteMovies: false,
     }
     this.addToFavorites = this.addToFavorites.bind(this)
-    this.removeNameFromFavorites = this.removeNameFromFavorites.bind(this)
+    // this.removeNameFromFavorites = this.removeNameFromFavorites.bind(this)
     this.removeObjFromFavoriteMovies = this.removeObjFromFavoriteMovies.bind(this)
     this.removeObjFromFavoriteChar = this.removeObjFromFavoriteChar.bind(this)
 
   }
 
 
-  addToFavorites(stateKeyFavoritesObj, stateKeyFavoriteNames, arrayOfFavObj, arrayOfFavNames, favObjToAdd, nameToAdd) {
+  addToFavorites(stateKeyFavoritesObj, arrayOfFavObj, favObjToAdd) {
     // console.log('state', this.state)
     this.setState({ 
       [stateKeyFavoritesObj]: [...arrayOfFavObj, favObjToAdd],
-      [stateKeyFavoriteNames] : [...arrayOfFavNames, nameToAdd],
+      // [stateKeyFavoriteNames] : [...arrayOfFavNames, nameToAdd],
     })
   }
 
-  removeNameFromFavorites(stateKeyFavoritesName, arrayOfFavNames, favNameToRemove) {
-    let filteredDeletionNames = arrayOfFavNames.filter(fav => fav !== favNameToRemove)
+  // removeNameFromFavorites(stateKeyFavoritesName, arrayOfFavNames, favNameToRemove) {
+  //   let filteredDeletionNames = arrayOfFavNames.filter(fav => fav !== favNameToRemove)
 
-    this.setState({
-      [stateKeyFavoritesName]: filteredDeletionNames,
-    })
-  }
+  //   this.setState({
+  //     [stateKeyFavoritesName]: filteredDeletionNames,
+  //   })
+  // }
 
+  //left it so to see there is only one parameter to change but how?  if remains so, got to clear off the params
   removeObjFromFavoriteMovies(stateKeyFavoritesObj, arrayOfFavObj, favObjNameToRemove) {
     let filteredDeletionObj = arrayOfFavObj.filter(fav => fav.title !== favObjNameToRemove)
 
@@ -72,7 +73,7 @@ export class App extends React.Component {
                                                           addToFavorites={this.addToFavorites} 
                                                           removeNameFromFavorites={this.removeNameFromFavorites} 
                                                           removeObjFromFavoriteChar={this.removeObjFromFavoriteChar} 
-                                                          currentFavoriteCharsNames={this.state.favoritesCharactersNames}
+                                                          currentFavoriteCharsNames={this.state.favoriteCharacters.map(c => c.name)}
                                                           currentFavoriteChars={this.state.favoriteCharacters}
                                                           />} />
         <Route path='/films/:filmID' render={(props) => <MovieDetails 
@@ -80,7 +81,7 @@ export class App extends React.Component {
                                                         addToFavorites={this.addToFavorites} 
                                                         removeNameFromFavorites={this.removeNameFromFavorites} 
                                                         removeObjFromFavoriteMovies={this.removeObjFromFavoriteMovies} 
-                                                        currentFavoriteMoviesTitles={this.state.favoriteMoviesTitles}
+                                                        currentFavoriteMoviesTitles={this.state.favoriteMovies.map(f => f.title)}
                                                         currentFavoriteMovies={this.state.favoriteMovies}
                                                         />} />
         <Route path='/films/:filmID/characters' component={CharactersList} />
