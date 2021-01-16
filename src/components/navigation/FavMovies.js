@@ -4,12 +4,15 @@ import { getId } from '../../util';
 import { Link } from 'react-router-dom';
 
 export const FavMovies = (props) => {
-    
+
     return (
-    
-        <NavDropdown title="Favorite Movies" id="basic-nav-dropdown">
-            <p className="mx-4"><em>Find your favorites here</em></p>
-            {props.favoriteMovies.map(movie => <NavDropdown.Item as={Link} to={"/films/" + getId(movie.url)}>{movie.title}</NavDropdown.Item>)}
-        </NavDropdown>
+        <>
+            { props.favoriteMovies &&
+                <NavDropdown title="Favorite Movies" id="basic-nav-dropdown">
+                    <p className="mx-4"><em>Find your favorites here</em></p>
+                    {props.favoriteMovies.map(movie => <NavDropdown.Item as={Link} to={"/films/" + getId(movie.url)}>{movie.title}</NavDropdown.Item>)}
+                </NavDropdown>
+            }
+        </>
     )
 }

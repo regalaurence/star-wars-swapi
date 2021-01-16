@@ -49,7 +49,7 @@ export class MovieDetails extends React.Component {
                     filmInfoLoading: false
                 })
                 this.populateCharacters(response.data.characters)
-                if (this.props.currentFavoriteMovies.includes(this.state.currentFilm.title)) {
+                if (this.props.currentFavoriteMoviesTitles.includes(this.state.currentFilm.title)) {
                     this.setState({
                         isFavorite : true
                     })
@@ -83,19 +83,21 @@ export class MovieDetails extends React.Component {
             })
     }
 
+
     toggleFavoriteHandler = () => {
         if (!this.props.currentFavoriteMoviesTitles.includes(this.state.currentFilm.title)) {
-            this.props.addToFavorites("favoriteMovies", "hasFavoriteMovies", this.props.currentFavoriteMovies, this.state.currentFilm)
+            this.props.addToFavorites("favoriteMovies", "favoriteMoviesTitles", this.props.currentFavoriteMovies, this.props.currentFavoriteMoviesTitles, this.state.currentFilm, this.state.currentFilm.title)
             this.setState({
                 isFavorite : true
             })
         }
+
         else {
-            this.props.removeFromFavorites("favoriteMovies", this.props.currentFavoriteMoviesTitles, this.state.currentFilm.title)
+            this.props.removeNameFromFavorites("favoriteMoviesTitles", this.props.currentFavoriteMoviesTitles, this.state.currentFilm.title)
+            this.props.removeObjFromFavoriteMovies("favoriteMovies", this.props.currentFavoriteMovies, this.state.currentFilm.title)
             this.setState({
                 isFavorite : false
             })
-            console.log(this.state.isFavorite)
         }
     }
 
@@ -163,4 +165,3 @@ export class MovieDetails extends React.Component {
         )
     }
 }
-

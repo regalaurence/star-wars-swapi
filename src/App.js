@@ -11,27 +11,49 @@ export class App extends React.Component {
     super(props)
     this.state = {
       favoriteMovies: [],
+      favoriteMoviesTitles: [],
       favoriteCharacters: [],
+      favoritesCharactersNames: [],
       hasFavoriteChars: false,
       hasFavoriteMovies: false,
     }
     this.addToFavorites = this.addToFavorites.bind(this)
-    this.removeFromFavorites = this.removeFromFavorites.bind(this)
+    this.removeNameFromFavorites = this.removeNameFromFavorites.bind(this)
+    this.removeObjFromFavoriteMovies = this.removeObjFromFavoriteMovies.bind(this)
+    this.removeObjFromFavoriteChar = this.removeObjFromFavoriteChar.bind(this)
+
   }
 
 
-  addToFavorites(stateFavtoAdd, hasFavBool, arrayOfFav, favToAdd) {
+  addToFavorites(stateKeyFavoritesObj, stateKeyFavoriteNames, arrayOfFavObj, arrayOfFavNames, favObjToAdd, nameToAdd) {
     // console.log('state', this.state)
     this.setState({ 
-      [stateFavtoAdd]: [...arrayOfFav, favToAdd],
-      [hasFavBool]: true 
+      [stateKeyFavoritesObj]: [...arrayOfFavObj, favObjToAdd],
+      [stateKeyFavoriteNames] : [...arrayOfFavNames, nameToAdd],
     })
   }
 
-  removeFromFavorites(stateToChange, arrayOfFav, favToRemove) {
-    let filteredDeletion = arrayOfFav.filter(fav => fav !== favToRemove)
+  removeNameFromFavorites(stateKeyFavoritesName, arrayOfFavNames, favNameToRemove) {
+    let filteredDeletionNames = arrayOfFavNames.filter(fav => fav !== favNameToRemove)
+
     this.setState({
-      [stateToChange]: filteredDeletion 
+      [stateKeyFavoritesName]: filteredDeletionNames,
+    })
+  }
+
+  removeObjFromFavoriteMovies(stateKeyFavoritesObj, arrayOfFavObj, favObjNameToRemove) {
+    let filteredDeletionObj = arrayOfFavObj.filter(fav => fav.title !== favObjNameToRemove)
+
+    this.setState({
+      [stateKeyFavoritesObj]: filteredDeletionObj,
+    })
+  }
+
+  removeObjFromFavoriteChar(stateKeyFavoritesObj, arrayOfFavObj, favObjNameToRemove) {
+    let filteredDeletionObj = arrayOfFavObj.filter(fav => fav.name !== favObjNameToRemove)
+
+    this.setState({
+      [stateKeyFavoritesObj]: filteredDeletionObj,
     })
   }
 
@@ -48,15 +70,17 @@ export class App extends React.Component {
         <Route path='/people/:charID' render={(props) => <CharacterDetails 
                                                           {...props} 
                                                           addToFavorites={this.addToFavorites} 
-                                                          removeFromFavorites={this.removeFromFavorites} 
-                                                          currentFavoriteCharsNames={this.state.favoriteCharacters.map(char => char.name)}
+                                                          removeNameFromFavorites={this.removeNameFromFavorites} 
+                                                          removeObjFromFavoriteChar={this.removeObjFromFavoriteChar} 
+                                                          currentFavoriteCharsNames={this.state.favoritesCharactersNames}
                                                           currentFavoriteChars={this.state.favoriteCharacters}
                                                           />} />
         <Route path='/films/:filmID' render={(props) => <MovieDetails 
                                                         {...props} 
                                                         addToFavorites={this.addToFavorites} 
-                                                        removeFromFavorites={this.removeFromFavorites} 
-                                                        currentFavoriteMoviesTitles={this.state.favoriteMovies.map(movie => movie.title)}
+                                                        removeNameFromFavorites={this.removeNameFromFavorites} 
+                                                        removeObjFromFavoriteMovies={this.removeObjFromFavoriteMovies} 
+                                                        currentFavoriteMoviesTitles={this.state.favoriteMoviesTitles}
                                                         currentFavoriteMovies={this.state.favoriteMovies}
                                                         />} />
         <Route path='/films/:filmID/characters' component={CharactersList} />

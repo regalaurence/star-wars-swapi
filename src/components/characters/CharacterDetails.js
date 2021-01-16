@@ -91,13 +91,14 @@ export class CharacterDetails extends React.Component {
 
     toggleFavoriteHandler = () => {
         if (!this.props.currentFavoriteCharsNames.includes(this.state.character.name)) {
-            this.props.addToFavorites("favoriteCharacters", "hasFavoriteChars", this.props.currentFavoriteChars, this.state.character)
+            this.props.addToFavorites("favoriteCharacters", "favoritesCharactersNames", this.props.currentFavoriteChars, this.props.currentFavoriteCharsNames, this.state.character, this.state.character.name)
             this.setState({
                 isFavorite: true
             })
         }
         else {
-            this.props.removeFromFavorites("favoriteCharacters", this.props.currentFavoriteCharsNames, this.state.character.name)
+            this.props.removeNameFromFavorites("favoritesCharactersNames", this.props.currentFavoriteCharsNames, this.state.character.name)
+            this.props.removeObjFromFavoriteChar("favoriteCharacters", this.props.currentFavoriteChars, this.state.character.name)
             this.setState({
                 isFavorite: false
             })
