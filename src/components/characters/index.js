@@ -4,4 +4,3 @@ export * from './CharFilmList';
 export * from './CharVehiclesList';
 export * from './CharStarshipsList';
 export * from './CharSpecies';
-export * from '../navigation/FooterButtons';
