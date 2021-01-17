@@ -10,7 +10,7 @@ export const ToggleFav = (props) => {
 
     return (
         <> { props.isFavorite ?
-            <Button onClick={props.toggleFavoriteHandler}
+            <Button data-testid="button" onClick={props.toggleFavoriteHandler}
                 variant="danger"
                 className="m-2">
                 Remove from favorites

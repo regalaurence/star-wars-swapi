@@ -32,7 +32,6 @@ export const populateInfo = (key, arrayOfURLs, context) => {
                         }
                     }
                 })
-          
     })
 }  
     

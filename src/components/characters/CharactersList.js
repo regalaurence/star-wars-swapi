@@ -17,8 +17,8 @@ export const CharactersList = (props) => {
                                 <Col><p><strong>Characters</strong></p></Col>
                                 {/* lets check the states of characters data fetching and render accordingly */}
                                 <Col>{renderComponent(props.charLoading, props.charError, props.characters
-                                        .map((char, index) => <Link
-                                                key={index}
+                                        .map(char => <Link
+                                                key={getId(char.url)}
                                                 to={"/people/" + getId(char.url)}>
                                                 <li>{char.name}</li>
                                         </Link>))}

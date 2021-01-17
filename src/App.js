@@ -64,7 +64,7 @@ class App extends React.Component {
           favoriteMovies={this.state.favoriteMovies}
           favoriteCharacters={this.state.favoriteCharacters}
         />
-        <Route exact path='/' component={MovieList} />
+        <Route getByTestId="homeroute" exact path='/' component={MovieList} />
         <Route exact path='/films' component={MovieList} />
         <Route path='/people/:charID' render={(props) =>
           <CharacterDetails

@@ -1,6 +1,6 @@
 export const getId = (url) => {
     const splittedURL = url.split('/');
-    splittedURL.pop()
-    const id = splittedURL.splice(-1).pop()
+    const idIndex = splittedURL.length - 2
+    const id = splittedURL[idIndex]
     return id
 }

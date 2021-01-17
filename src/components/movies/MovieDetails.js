@@ -40,8 +40,7 @@ export class MovieDetails extends React.Component {
                 isNotEmpty: true,
                 loading: true
             }
-        },
-
+        }
     }
 
     componentDidMount() {
