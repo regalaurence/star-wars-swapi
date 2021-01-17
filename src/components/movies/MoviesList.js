@@ -14,7 +14,7 @@ export class MovieList extends React.Component {
   }
 
   componentDidMount() {
-    axios.get("http://swapi.dev/api/films/")
+    axios.get("https://swapi.dev/api/films/")
       .then(response => {
         console.log(response)
         this.setState({
