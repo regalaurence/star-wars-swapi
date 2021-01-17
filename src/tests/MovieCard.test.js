@@ -1,4 +1,4 @@
-import { render, fireEvent, waitFor, screen, getByTestId } from '@testing-library/react'
+import { render} from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import { MovieCard } from '../components/movies'
 import { Router } from 'react-router-dom'
