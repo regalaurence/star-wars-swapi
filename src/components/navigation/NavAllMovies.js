@@ -4,13 +4,18 @@ import { Link } from 'react-router-dom';
 import { getId, renderComponent } from '../../util';
 
 
-export const AllMovies = (props) => {
+export const NavAllMovies = (props) => {
 
     return (
         <NavDropdown title="Movies" id="basic-nav-dropdown">
             {renderComponent(props.isLoading, props.isError,
                 props.allMovies
-                    .map(movie => <NavDropdown.Item as={Link} to={"/films/" + getId(movie.url)}>{movie.title}</NavDropdown.Item>))}
+                    .map((movie, index) => <NavDropdown.Item
+                        key={index}
+                        as={Link}
+                        to={"/films/" + getId(movie.url)}>
+                        {movie.title}
+                    </NavDropdown.Item>))}
         </NavDropdown>
     )
 }

@@ -18,7 +18,12 @@ export const CharFilmList = (props) => {
                 <Col><p><strong>Movies</strong></p></Col>
                 <Col> {/* lets check the loading status and render accordingly */}
                     {renderComponent(props.areFilmsLoading, props.areFilmsError, 
-                    props.films.map(film => <li><Link to={"/films/" + getId(film.url)}>{film.title}</Link></li>)
+                    props.films.map((film, index) => 
+                    <Link 
+                    key={index}
+                    to={"/films/" + getId(film.url)}>
+                    <li>{film.title}</li>
+                    </Link>)
                     )}  
                 </Col>
                 

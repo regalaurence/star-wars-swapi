@@ -1,10 +1,10 @@
 import React from 'react'
 import axios from 'axios'
-import { FavMovies, FavChar } from '.'
+import { FavDropdown } from '.'
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import { LinkContainer } from "react-router-bootstrap";
-import { AllMovies } from '.';
+import { NavAllMovies } from '.';
 
 export class NavigationBar extends React.Component {
 
@@ -38,17 +38,25 @@ export class NavigationBar extends React.Component {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
-                        <AllMovies 
+                        <NavAllMovies
                             isLoading={this.state.isLoading}
                             isError={this.state.isError}
                             allMovies={this.state.allMovies}
                         />
-                        <FavMovies favoriteMovies={this.props.favoriteMovies}/>
-                        <FavChar favoriteCharacters={this.props.favoriteCharacters}/>
+                        <FavDropdown title={"Favorite Movies"}
+                            favoritesToDisplay={this.props.favoriteMovies}
+                            keyToPrint={"title"}
+                            url={"/films/"}
+                        />
+                        <FavDropdown title={"Favorite Characters"}
+                            favoritesToDisplay={this.props.favoriteCharacters}
+                            keyToPrint={'name'}
+                            url={'/people/'} />
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
         )
     }
 }
-
+<>
+</>

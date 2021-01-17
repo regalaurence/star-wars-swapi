@@ -14,7 +14,7 @@ export const CharStarshipsList = (props) => {
                         <Col><p><strong>Starships</strong></p></Col>
                         <Col> {/* lets check the loading status and render accordingly */}
                             {renderComponent(props.areStarshipsLoading, props.areStarshipsError,
-                                props.starships.map(s => <li>{s.name}</li>)
+                                props.starships.map((s, index) => <li key={index}>{s.name}</li>)
                             )}
                         </Col>
                     </Row>

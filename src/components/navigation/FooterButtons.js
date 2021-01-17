@@ -1,7 +1,7 @@
 import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button'
 import { Link } from 'react-router-dom';
-import { ToggleFav } from '../navigation'
+import { ToggleFav } from '.'
 
 
 export const FooterButtons = (props) => {

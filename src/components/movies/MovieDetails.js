@@ -1,37 +1,47 @@
 import React from 'react'
 import axios from 'axios'
-import { CharactersList } from '../characters'
-import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import Button from 'react-bootstrap/Button'
 import Image from 'react-bootstrap/Image'
+import { CharactersList } from '../characters'
+import { MovieDescription } from '.'
 import { renderComponent, populateInfo } from '../../util';
+import { FooterButtons, InfoLine } from '../navigation';
 import './MovieDetails.css'
-import { ToggleFav } from '../navigation';
 
-
+// Props: 
+// {...props} => i.e filmID 
+// props.addToFavorites => a function that adds film to favorite list 
+// props.removeFromFavorites=> a function that removes a film from favorite list
+// props.currentFavoriteMoviesTitles => title of the movies currently likes
+// props.currentFavoriteMovies => currently liked movies as objects 
 
 export class MovieDetails extends React.Component {
 
     state = {
-        currentFilmID: null,
-        currentFilm: {},
-        currentFilmImg: '',
-        charLoading: true,
-        filmInfoLoading: true,
-        charError: false,
-        filmError: false,
-        isFavorite: false,
+        film: {
+            items: {
+                currentFilmID: null,
+                currentFilm: {},
+                currentFilmImg: '',
+            },
+            status: {
+                error: false,
+                isNotEmpty: true,
+                isLoading: true,
+                isFavorite: false
+            }
+        },
         characters: {
             items: [],
             status: {
                 error: false,
                 isNotEmpty: true,
-                loading: false
+                loading: true
             }
-        }, 
+        },
+
     }
 
     componentDidMount() {
@@ -40,9 +50,9 @@ export class MovieDetails extends React.Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps.match.params.filmID !== this.props.match.params.filmID) {
-        this.getFilmDetails()
+            this.getFilmDetails()
         }
-      }
+    }
 
     getFilmDetails() {
         const filmID = this.props.match.params.filmID
@@ -50,123 +60,138 @@ export class MovieDetails extends React.Component {
         axios.get(url)
             .then(response => {
                 this.setState({
-                    currentFilmID: filmID,
-                    currentFilm: response.data,
-                    currentFilmImg: "/images/movies/" + filmID + ".jpg",
-                    filmInfoLoading: false
+                    film: {
+                        items: {
+                            currentFilmID: filmID,
+                            currentFilm: response.data,
+                            currentFilmImg: "/images/movies/" + filmID + ".jpg",
+                        },
+                        status: {
+                            ...this.state.film.status,
+                            isLoading: false,
+                        }
+                    },
+                    characters: {
+                        ...this.state.characters
+                    }
                 })
-                if (this.props.currentFavoriteMoviesTitles.includes(this.state.currentFilm.title)) {
+                if (this.props.currentFavoriteMoviesTitles.includes(this.state.film.items.currentFilm.title)) {
                     this.setState({
-                        isFavorite : true
+                        film: {
+                            ...this.state.film,
+                            status: {
+                                ...this.state.film.status,
+                                isFavorite: true,
+                            }
+                        },
+                        characters: {
+                            ...this.state.characters
+                        }
                     })
                 }
                 return populateInfo('characters', response.data.characters, this)
-
             })
             .catch((error) => {
                 this.setState({
-                    filmError: true
+                    film: {
+                        ...this.state.film,
+                        status: {
+                            ...this.state.film.status,
+                            error: true,
+                        }
+                    },
+                    characters: {
+                        ...this.state.characters
+                    }
                 })
             })
     }
-
-    populateCharacters = (arrayOfCharURL) => {
-        // console.log(arrayOfCharURL)
-        let charPromises = arrayOfCharURL.map(charURL =>
-            axios.get(charURL)
-        )
-
-        return Promise.all(charPromises)
-            .then((response) => {
-                console.log('res', response)
-                const characters = response.map(char => char.data)
-                this.setState({
-                    characters: characters,
-                    charLoading: false
-                })
-            }).catch((error) => {
-                this.setState({
-                    charError: true
-                })
-            })
-    }
-
 
     toggleFavoriteHandler = () => {
-        if (!this.props.currentFavoriteMoviesTitles.includes(this.state.currentFilm.title)) {
-            this.props.addToFavorites("favoriteMovies", this.props.currentFavoriteMovies, this.state.currentFilm)
+        if (!this.props.currentFavoriteMoviesTitles.includes(this.state.film.items.currentFilm.title)) {
+            this.props.addToFavorites("favoriteMovies", this.props.currentFavoriteMovies, this.state.film.items.currentFilm)
             this.setState({
-                isFavorite : true
+                film: {
+                    ...this.state.film,
+                    status: {
+                        ...this.state.film.status,
+                        isFavorite: true,
+                    }
+                },
+                characters: {
+                    ...this.state.characters
+                }
             })
         }
 
         else {
-            this.props.removeFromFavorites("favoriteMovies", this.props.currentFavoriteMovies, this.state.currentFilm.title, "title")
+            this.props.removeFromFavorites("favoriteMovies", this.props.currentFavoriteMovies, this.state.film.items.currentFilm.title, "title")
             this.setState({
-                isFavorite : false
+                film: {
+                    ...this.state.film,
+                    status: {
+                        ...this.state.film.status,
+                        isFavorite: false,
+                    }
+                },
+                characters: {
+                    ...this.state.characters
+                }
             })
         }
     }
 
     render() {
-        console.log("THE CHARACRERS" + this.state.characters.items)
-  
         return (
             <>
-                <Row className="p-2 m-2 text-center mx-auto">
-                    <Col><h1>{this.state.currentFilm.title}</h1></Col>
+                {this.state.film.items && <Row className="p-2 m-2 text-center mx-auto">
+                    <Col><h1>{this.state.film.items.currentFilm.title}</h1></Col>
                 </Row>
-                {/* let's check the states and render accordingly */}
-                {renderComponent(this.state.filmInfoLoading, this.state.filmError,
+                }
+                {this.state.film.items && renderComponent(this.state.film.status.isLoading, this.state.film.status.error,
                     <><Container className="movie-details-container text-center mx-auto">
                         <div className="left-part-lg">
                             <Row>
-                                <Col><Image rounded className="movie-cover img-thumbail" src={this.state.currentFilmImg} /></Col>
+                                <Col>
+                                    <Image rounded
+                                        className="movie-cover img-thumbail"
+                                        src={this.state.film.items.currentFilmImg}
+                                    />
+                                </Col>
                             </Row>
                         </div>
                         <div className="right-part-lg">
                             <Row className="p-3">
                                 <Col><h2>About the movie</h2></Col>
                             </Row>
-                            <Row className="text-left">
-                                <Col><p><strong>Director</strong></p></Col>
-                                <Col>{this.state.currentFilm.director}</Col>
-                            </Row>
-                            <Row className="text-left">
-                                <Col><p><strong>Issue Number</strong></p></Col>
-                                <Col>{this.state.currentFilm.episode_id}</Col>
-                            </Row>
-                            <hr></hr>
-                            {this.state.characters.items && 
-                            <CharactersList
-                                   charLoading={this.state.characters.status.loading}
-                                   charError={this.state.characters.error}
-                                   characters={this.state.characters.items}
+                            <InfoLine
+                                header={"Director"}
+                                data={this.state.film.items.currentFilm.director}
                             />
+                            <InfoLine
+                                header={"Issue Number"}
+                                data={this.state.film.items.currentFilm.episode_id}
+                            />
+                            <hr></hr>
+                            {this.state.characters.items &&
+                                <CharactersList
+                                    charLoading={this.state.characters.status.loading}
+                                    charError={this.state.characters.status.error}
+                                    characters={this.state.characters.items}
+                                />
                             }
                         </div>
                     </Container>
-                        <Container className="description">
-                            <hr></hr>
-                            <Row className="p-3 text-center">
-                                <Col><h2>What's the story?</h2></Col>
-                            </Row>
-                            <Row className="p-4 text-justify">
-                                <em><p>{this.state.currentFilm.opening_crawl}</p></em>
-                            </Row>
-                            <hr></hr>
-                        </Container>
-                        <Container className="text-center footer-buttons">
-                            <footer>
-                                <Link to={"/films"}><Button variant="dark" className="m-2">Back to films</Button></Link>
-                                <ToggleFav 
-                                isFavorite={this.state.isFavorite} 
-                                toggleFavoriteHandler={this.toggleFavoriteHandler} 
-                                currentFavorites={this.props.currentFavoriteMovies}
-                                toAdd={this.state.currentFilm.title}
-                                 />
-                            </footer>
-                        </Container>
+                        <MovieDescription
+                            opening_crawl={this.state.film.items.currentFilm.opening_crawl}
+                        />
+                        <FooterButtons
+                            isFavorite={this.state.film.status.isFavorite}
+                            toggleFavoriteHandler={this.toggleFavoriteHandler}
+                            currentFavorites={this.props.currentFavoriteMovies}
+                            toAdd={this.state.film.items.currentFilm.title}
+
+                        />
                     </>)
                 }
             </>

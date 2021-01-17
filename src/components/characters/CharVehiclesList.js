@@ -14,7 +14,7 @@ export const CharVehiclesList = (props) => {
                     <Col><p><strong>Vehicles</strong></p></Col>
                     <Col> {/* lets check the loading status and render accordingly */}
                         {renderComponent(props.areVehiclesLoading, props.areVehiclesError,
-                            props.vehicles.map(v => <li>{v.name}</li>)
+                            props.vehicles.map((v, index) => <li key={index}>{v.name}</li>)
                         )}
                     </Col>
                 </Row>

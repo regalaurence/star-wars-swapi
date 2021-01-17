@@ -11,7 +11,7 @@ export const CharSpecies = (props) => {
                 <Col><p><strong>Species</strong></p></Col>
                 <Col> {/* lets check the loading status and render accordingly */}
                     {renderComponent(props.areSpeciesLoading, props.areSpeciesError,
-                        props.species.map(s => <p>{s.name}</p>)
+                        props.species.map((s, index) => <li key={index}>{s.name}</li>)
                     )}
                 </Col>
             </Row>

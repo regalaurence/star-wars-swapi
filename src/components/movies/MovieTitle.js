@@ -5,8 +5,8 @@ import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 
 // props inherited from parents : 
-// props.title
-// props.filmURL
+// props.title : movie title
+// props.filmURL : movie url of which we can extract the id 
 
 export const MovieTitle = (props) => {
 
