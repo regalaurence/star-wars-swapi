@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col'
 import Image from 'react-bootstrap/Image'
 import { CharactersList } from '../characters'
 import { MovieDescription } from '.'
-import { renderComponent, populateInfo } from '../../util';
+import { renderComponent, populateInfo, replaceProtocol } from '../../util';
 import { FooterButtons, InfoLine } from '../navigation';
 import './MovieDetails.css'
 
@@ -58,6 +58,7 @@ export class MovieDetails extends React.Component {
         const url = "https://swapi.dev/api/films/" + filmID + "/";
         axios.get(url)
             .then(response => {
+                let charactersURLs = replaceProtocol(response.data.characters)
                 this.setState({
                     film: {
                         items: {
@@ -88,7 +89,7 @@ export class MovieDetails extends React.Component {
                         }
                     })
                 }
-                return populateInfo('characters', response.data.characters, this)
+                return populateInfo('characters', charactersURLs, this)
             })
             .catch((error) => {
                 this.setState({

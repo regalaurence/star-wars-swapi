@@ -5,7 +5,7 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { CharFilmList, CharVehiclesList, CharStarshipsList, CharSpecies } from './';
-import { renderComponent, populateInfo } from '../../util'
+import { renderComponent, populateInfo, replaceProtocol } from '../../util'
 import { FooterButtons, InfoLine } from "../navigation";
 
 export class CharacterDetails extends React.Component {
@@ -79,13 +79,13 @@ export class CharacterDetails extends React.Component {
                 })
                 return populateInfo("films", this.state.character.item.films, this)
                     .then(() => {
-                        return populateInfo("vehicles", this.state.character.item.vehicles, this)
+                        return populateInfo("vehicles", replaceProtocol(this.state.character.item.vehicles), this)
                     })
                     .then(() => {
-                        return populateInfo("starships", this.state.character.item.starships, this)
+                        return populateInfo("starships", replaceProtocol(this.state.character.item.starships), this)
                     })
                     .then(() => {
-                        return populateInfo("species", this.state.character.item.species, this)
+                        return populateInfo("species", replaceProtocol(this.state.character.item.species), this)
                     })
 
             })
