@@ -15,7 +15,7 @@ export class NavigationBar extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('http://swapi.dev/api/films')
+        axios.get('https://swapi.dev/api/films')
             .then((response) => {
                 this.setState({
                     allMovies: response.data.results,
