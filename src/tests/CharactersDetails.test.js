@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/extend-expect'
 import { CharacterDetails } from '../components/characters'
 import { Router } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
-import { movies, characters } from './mocks'
+import { characters } from './mocks'
 import axios from 'axios'
 
 describe('CharacterDetails', () => {
