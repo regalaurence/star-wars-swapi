@@ -1,4 +1,4 @@
-### node
+### 'node'
 v14.14.0
 
 ### `npm start`
@@ -24,19 +24,19 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-# How to build upon it
+### `How to build upon it`
 - The API used is SWAPI 
 - All documentation here : https://swapi.dev/documentation
 - React Bootstrap and bootstrap are used as UI framework
 - images should have the following name conventation : characterORmovieID.jpg 
 
-# What the user can do 
+### `What the user can do`
 When users clicks on an element of the film list, they can see the following info:
 - Film data
 - Director data
 - List of characters
-Users can click a character to show its information.
-Users can save a film as favorite.
-Users can save a character as favorite.
-Users can remove characters and films from favorites.
-The favorite persists. When the users refreshes the page or comes back to it later, the favorite lists are untouched.  
+- Users can click a character to show its information.
+- Users can save a film as favorite.
+- Users can save a character as favorite.
+- Users can remove characters and films from favorites.
+- The favorite persists. When the users refreshes the page or comes back to it later, the favorite lists are untouched.  
