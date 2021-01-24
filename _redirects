@@ -1,1 +1,7 @@
-/*    /index.html   200
+# Redirects from what the browser requests to what we serve
+
+/                  /
+/films/            /films
+/films             /films
+/films/:id         /films/:id
+/people/:charID    /people/:charID
